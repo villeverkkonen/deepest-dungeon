@@ -6,6 +6,10 @@ function playerCountInput() {
   return screen.getByTestId('player-count-input');
 }
 
+function playerLevelInput() {
+  return screen.getByTestId('player-level-input');
+}
+
 beforeEach(() => {
   render(<App />);
 });
@@ -29,6 +33,26 @@ test('player count input value changes', () => {
 
 test('player count input does not accept other than number input', () => {
   const input = playerCountInput();
+  const originalInputValue = input.nodeValue;
+  fireEvent.change(input, { target: { value: 'text' } });
+  expect(input).toHaveValue(originalInputValue);
+});
+
+test('has a number input field for player level', () => {
+  const input = playerLevelInput();
+  expect(input).toBeInTheDocument();
+  expect(input).toHaveAttribute('type', 'number');
+  expect(input).toHaveAttribute('placeholder', 'Player level');
+});
+
+test('player level input value changes', () => {
+  const input = playerLevelInput();
+  fireEvent.change(input, { target: { value: 8 } });
+  expect(input).toHaveValue(8);
+});
+
+test('player level input does not accept other than number input', () => {
+  const input = playerLevelInput();
   const originalInputValue = input.nodeValue;
   fireEvent.change(input, { target: { value: 'text' } });
   expect(input).toHaveValue(originalInputValue);
