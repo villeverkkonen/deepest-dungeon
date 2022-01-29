@@ -10,6 +10,10 @@ function playerLevelInput() {
   return screen.getByTestId('player-level-input');
 }
 
+function monsterInput() {
+  return screen.getByTestId('monster-input');
+}
+
 beforeEach(() => {
   render(<App />);
 });
@@ -18,7 +22,7 @@ test('show page title', () => {
   expect(screen.getByText('Deepest Dungeon')).toBeInTheDocument();
 });
 
-test('has a number input field for player count', () => {
+test('has a number input for player count', () => {
   const input = playerCountInput();
   expect(input).toBeInTheDocument();
   expect(input).toHaveAttribute('type', 'number');
@@ -38,7 +42,7 @@ test('player count input does not accept other than number input', () => {
   expect(input).toHaveValue(originalInputValue);
 });
 
-test('has a number input field for player level', () => {
+test('has a number input for player level', () => {
   const input = playerLevelInput();
   expect(input).toBeInTheDocument();
   expect(input).toHaveAttribute('type', 'number');
@@ -51,9 +55,15 @@ test('player level input value changes', () => {
   expect(input).toHaveValue(8);
 });
 
-test('player level input does not accept other than number input', () => {
-  const input = playerLevelInput();
-  const originalInputValue = input.nodeValue;
-  fireEvent.change(input, { target: { value: 'text' } });
-  expect(input).toHaveValue(originalInputValue);
+test('has a text input for monsters', () => {
+  const input = monsterInput();
+  expect(input).toBeInTheDocument();
+  expect(input).toHaveAttribute('type', 'text');
+  expect(input).toHaveAttribute('placeholder', 'Monster search');
+});
+
+test('monster input value changes', () => {
+  const input = monsterInput();
+  fireEvent.change(input, { target: { value: 'Black Dragon' } });
+  expect(input).toHaveValue('Black Dragon');
 });
