@@ -30,6 +30,6 @@ test('player count input value changes', () => {
 test('player count input does not accept other than number input', () => {
   const input = playerCountInput();
   const originalInputValue = input.nodeValue;
-  fireEvent.change((input), { target: { value: 'text' } });
+  fireEvent.change(input, { target: { value: 'text' } });
   expect(input).toHaveValue(originalInputValue);
 });

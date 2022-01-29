@@ -3,11 +3,11 @@ import { Form } from 'react-bootstrap';
 import './App.css';
 
 function App() {
-  const [playerCount, setPlayerCount] = useState<string>('1');
+  const [playerCount, setPlayerCount] = useState<string>('4');
 
   const playerCountInputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlayerCount(e.target.value);
-  }
+  };
 
   return (
     <div>
