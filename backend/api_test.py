@@ -1,14 +1,16 @@
-import requests
-import json
-from api import app
+import unittest
+from api import get_monsters
+from unittest.mock import patch
 
 
-def test_get_monsters():
-    url = "https://api.open5e.com/monsters"
-    monsters = requests.get(url)
-    response = app.test_client().get("/monsters", content_type="html/text")
+class ApiTests(unittest.TestCase):
 
-    assert response.status_code == 200
-    assert "count".encode() in response.data
-    assert "results".encode() in response.data
-    assert json.loads(response.data) == monsters.json()
+    @patch('api.requests.get')
+    def test_get_monsters(self, mock_get):
+        mock_get.return_value.status_code = 200
+        response = get_monsters()
+        self.assertEqual(response.status_code, 200)
+
+
+if __name__ == "__main__":
+    unittest.main()
