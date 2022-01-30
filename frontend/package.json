@@ -44,5 +44,6 @@
   },
   "devDependencies": {
     "prettier": "2.5.1"
-  }
+  },
+  "proxy": "http://127.0.0.1:5000/"
 }

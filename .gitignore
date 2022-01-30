@@ -20,3 +20,9 @@
 /frontend/npm-debug.log*
 /frontend/yarn-debug.log*
 /frontend/yarn-error.log*
+
+# BACKEND
+backend/venv
+backend/*.pyc
+backend/*.DS_Store
+backend/__pycache__
