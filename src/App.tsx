@@ -13,6 +13,7 @@ function App() {
   const [filteredMonsters, setFilteredMonsters] = useState<
     ReadonlyArray<Monster>
   >([]);
+  const [loadingMonsters, setLoadingMonsters] = useState<boolean>(true);
 
   const playerCountInputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlayerCount(e.target.value);
@@ -38,11 +39,13 @@ function App() {
 
   useEffect(() => {
     fetchMonsters().then((monsters) => setMonsters(monsters));
+    setLoadingMonsters(false);
   }, []);
 
   return (
     <div>
       <h1>Deepest Dungeon</h1>
+      {loadingMonsters ? <p>Loading...</p> : null}
       <div>
         <Form.Control
           type="number"
