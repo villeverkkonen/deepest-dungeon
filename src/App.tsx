@@ -74,9 +74,12 @@ function App() {
         />
       </div>
       <div>
-        {filteredMonsters.length === 0 ? <p>No monsters found</p> : null}
+        {filteredMonsters.length === 0 ? (
+          <p>No monsters found</p>
+        ) : (
+          <p>Found monsters: {filteredMonsters.length}</p>
+        )}
       </div>
-      <div>{`Found monsters: ${filteredMonsters.length}`}</div>
     </div>
   );
 }

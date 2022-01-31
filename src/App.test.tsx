@@ -84,15 +84,12 @@ test('should display no monsters found when input length is less than two', () =
   expectNoMonstersFound();
   fireEvent.change(monsterInput(), { target: { value: 'a' } });
   expectNoMonstersFound();
+  expect(screen.queryByText('Found monsters')).not.toBeInTheDocument();
 });
 
 test('show monsters when monsters input length is two or more', () => {
   expectNoMonstersFound();
   fireEvent.change(monsterInput(), { target: { value: 'dr' } });
   expect(screen.queryByText('No monsters found')).not.toBeInTheDocument();
-});
-
-test('should display monster count', () => {
-  fireEvent.change(monsterInput(), { target: { value: 'dr' } });
   expect(screen.getByText('Found monsters: 1')).toBeInTheDocument();
 });
