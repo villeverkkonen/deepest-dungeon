@@ -1,6 +1,9 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 import App from './App';
+import * as api from './utils/fetchMonsters';
+import { testMonsters } from './utils/testMonsters';
 
 function playerCountInput() {
   return screen.getByTestId('player-count-input');
@@ -14,8 +17,16 @@ function monsterInput() {
   return screen.getByTestId('monster-input');
 }
 
+function expectNoMonstersFound() {
+  expect(screen.getByText('No monsters found')).toBeInTheDocument();
+}
+
 beforeEach(() => {
-  render(<App />);
+  const mock = jest.spyOn(api, 'fetchMonsters').mockResolvedValue(testMonsters);
+  act(() => {
+    render(<App />);
+  });
+  expect(mock).toHaveBeenCalledTimes(1);
 });
 
 test('show page title', () => {
@@ -31,14 +42,18 @@ test('has a number input for player count', () => {
 
 test('player count input value changes', () => {
   const input = playerCountInput();
-  fireEvent.change(input, { target: { value: 4 } });
+  act(() => {
+    fireEvent.change(input, { target: { value: 4 } });
+  });
   expect(input).toHaveValue(4);
 });
 
 test('player count input does not accept other than number input', () => {
   const input = playerCountInput();
   const originalInputValue = input.nodeValue;
-  fireEvent.change(input, { target: { value: 'text' } });
+  act(() => {
+    fireEvent.change(input, { target: { value: 'text' } });
+  });
   expect(input).toHaveValue(originalInputValue);
 });
 
@@ -51,7 +66,9 @@ test('has a number input for player level', () => {
 
 test('player level input value changes', () => {
   const input = playerLevelInput();
-  fireEvent.change(input, { target: { value: 8 } });
+  act(() => {
+    fireEvent.change(input, { target: { value: 8 } });
+  });
   expect(input).toHaveValue(8);
 });
 
@@ -62,8 +79,33 @@ test('has a text input for monsters', () => {
   expect(input).toHaveAttribute('placeholder', 'Monster search');
 });
 
-test('monster input value changes', () => {
+test('monster input value changes to lowercase', () => {
   const input = monsterInput();
-  fireEvent.change(input, { target: { value: 'Black Dragon' } });
-  expect(input).toHaveValue('Black Dragon');
+  act(() => {
+    fireEvent.change(input, { target: { value: 'Test Dragon' } });
+  });
+  expect(input).toHaveValue('Test Dragon');
+});
+
+test('should display no monsters found when input length is less than two', () => {
+  expectNoMonstersFound();
+  act(() => {
+    fireEvent.change(monsterInput(), { target: { value: 'a' } });
+  });
+  expectNoMonstersFound();
+});
+
+test('show monsters when monsters input length is two or more', () => {
+  expectNoMonstersFound();
+  act(() => {
+    fireEvent.change(monsterInput(), { target: { value: 'dr' } });
+  });
+  expect(screen.queryByText('No monsters found')).not.toBeInTheDocument();
+});
+
+test('should display monster count', () => {
+  act(() => {
+    fireEvent.change(monsterInput(), { target: { value: 'dr' } });
+  });
+  expect(screen.getByText('Found monsters: 1')).toBeInTheDocument();
 });

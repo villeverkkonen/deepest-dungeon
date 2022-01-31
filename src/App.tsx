@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
+import { fetchMonsters } from './utils/fetchMonsters';
+import { Monster } from './utils/Monster';
+
 import './App.css';
 
 function App() {
   const [playerCount, setPlayerCount] = useState<string>('');
   const [playerLevel, setPlayerLevel] = useState<string>('');
   const [monsterInput, setMonsterInput] = useState<string>('');
+  const [monsters, setMonsters] = useState<ReadonlyArray<Monster>>([]);
+  const [filteredMonsters, setFilteredMonsters] = useState<
+    ReadonlyArray<Monster>
+  >([]);
 
   const playerCountInputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlayerCount(e.target.value);
@@ -16,8 +23,22 @@ function App() {
   };
 
   const monsterInputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMonsterInput(e.target.value);
+    const newMonsterInput = e.target.value;
+    setMonsterInput(newMonsterInput);
+    if (newMonsterInput.length > 1) {
+      setFilteredMonsters(
+        monsters.filter((monster) =>
+          monster.name.toLowerCase().includes(newMonsterInput.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredMonsters([]);
+    }
   };
+
+  useEffect(() => {
+    fetchMonsters().then((monsters) => setMonsters(monsters));
+  }, []);
 
   return (
     <div>
@@ -49,6 +70,10 @@ function App() {
           data-testid="monster-input"
         />
       </div>
+      <div>
+        {filteredMonsters.length === 0 ? <p>No monsters found</p> : null}
+      </div>
+      <div>{`Found monsters: ${filteredMonsters.length}`}</div>
     </div>
   );
 }
