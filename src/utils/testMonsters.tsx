@@ -1,6 +1,6 @@
-import { Monster } from './Monster';
+import { MonsterType } from './MonsterType';
 
-export const testMonsters: ReadonlyArray<Monster> = [
+export const testMonsters: ReadonlyArray<MonsterType> = [
   {
     name: 'Test Orc',
     challenge_rating: '2',
@@ -8,5 +8,9 @@ export const testMonsters: ReadonlyArray<Monster> = [
   {
     name: 'Test Dragon',
     challenge_rating: '4',
+  },
+  {
+    name: 'Monster',
+    challenge_rating: '6',
   },
 ];

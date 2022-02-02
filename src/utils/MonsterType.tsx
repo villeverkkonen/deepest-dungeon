@@ -1,4 +1,4 @@
-export interface Monster {
+export interface MonsterType {
   readonly name: string;
   readonly challenge_rating: string;
 }

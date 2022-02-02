@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route("/monsters")
 def get_monsters():
-    response = requests.get(BASE_URL + "/monsters")
+    response = requests.get(BASE_URL + "/monsters?limit=1500")
     if response.ok:
         return response.json()
     else:

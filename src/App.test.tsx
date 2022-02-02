@@ -92,3 +92,10 @@ test('show monsters when monsters input length is two or more', () => {
   expect(screen.queryByText('No monsters found')).not.toBeInTheDocument();
   expect(screen.getByText('Found monsters: 1')).toBeInTheDocument();
 });
+
+test('should list filtered monsters by input', () => {
+  fireEvent.change(monsterInput(), { target: { value: 'test' } });
+  expect(screen.getByText('Test Orc')).toBeInTheDocument();
+  expect(screen.getByText('Test Dragon')).toBeInTheDocument();
+  expect(screen.getByText('Found monsters: 2')).toBeInTheDocument();
+});

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { fetchMonsters } from './utils/fetchMonsters';
-import { Monster } from './utils/Monster';
+import { MonsterType } from './utils/MonsterType';
+import Monster from './components/Monster';
 
 import './App.css';
 
@@ -9,9 +10,9 @@ function App() {
   const [playerCount, setPlayerCount] = useState<string>('');
   const [playerLevel, setPlayerLevel] = useState<string>('');
   const [monsterInput, setMonsterInput] = useState<string>('');
-  const [monsters, setMonsters] = useState<ReadonlyArray<Monster>>([]);
+  const [monsters, setMonsters] = useState<ReadonlyArray<MonsterType>>([]);
   const [filteredMonsters, setFilteredMonsters] = useState<
-    ReadonlyArray<Monster>
+    ReadonlyArray<MonsterType>
   >([]);
   const [loadingMonsters, setLoadingMonsters] = useState<boolean>(true);
 
@@ -79,6 +80,11 @@ function App() {
         ) : (
           <p>Found monsters: {filteredMonsters.length}</p>
         )}
+      </div>
+      <div>
+        {filteredMonsters.map((monster) => {
+          return <Monster monster={monster} />;
+        })}
       </div>
     </div>
   );
