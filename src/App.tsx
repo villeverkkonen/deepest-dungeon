@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Form } from 'react-bootstrap';
+import { Card, Container } from 'react-bootstrap';
 import { fetchMonsters } from './utils/fetchMonsters';
 import { MonsterType } from './utils/MonsterType';
-import Monster from './components/Monster';
+import PlayerCountInput from './components/PlayerCountInput';
+import PlayerLevelInput from './components/PlayerLevelInput';
+import MonsterInput from './components/MonsterInput';
+import MonstersList from './components/MonstersList';
 
 import './App.css';
 
@@ -44,49 +47,32 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <h1>Deepest Dungeon</h1>
-      {loadingMonsters ? <p>Loading...</p> : null}
-      <div>
-        <Form.Control
-          type="number"
-          value={playerCount}
-          onChange={playerCountInputChanged}
-          placeholder="Player count"
-          data-testid="player-count-input"
-        />
-      </div>
-      <div>
-        <Form.Control
-          type="number"
-          value={playerLevel}
-          onChange={playerLevelInputChanged}
-          placeholder="Player level"
-          data-testid="player-level-input"
-        />
-      </div>
-      <div>
-        <Form.Control
-          type="text"
-          value={monsterInput}
-          onChange={monsterInputChanged}
-          placeholder="Monster search"
-          data-testid="monster-input"
-        />
-      </div>
-      <div>
-        {filteredMonsters.length === 0 ? (
-          <p>No monsters found</p>
+    <Container className="deepest-dungeon">
+      <Card>
+        <Card.Header as="h1" className="page-title">
+          Deepest Dungeon
+        </Card.Header>
+        {loadingMonsters ? (
+          <p>Loading...</p>
         ) : (
-          <p>Found monsters: {filteredMonsters.length}</p>
+          <Card.Body>
+            <PlayerCountInput
+              playerCount={playerCount}
+              playerCountInputChanged={playerCountInputChanged}
+            />
+            <PlayerLevelInput
+              playerLevel={playerLevel}
+              playerLevelInputChanged={playerLevelInputChanged}
+            />
+            <MonsterInput
+              monsterInput={monsterInput}
+              monsterInputChanged={monsterInputChanged}
+            />
+            <MonstersList monsters={filteredMonsters} />
+          </Card.Body>
         )}
-      </div>
-      <div>
-        {filteredMonsters.map((monster) => {
-          return <Monster monster={monster} />;
-        })}
-      </div>
-    </div>
+      </Card>
+    </Container>
   );
 }
 

@@ -5,9 +5,18 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #130300;
+  color: #f5c71a;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+@font-face {
+  font-family: 'Ancient Medium';
+  src: local('Ancient Medium'),
+    url('./fonts/ancient_medium.ttf') format('truetype');
+  font-weight: normal;
 }

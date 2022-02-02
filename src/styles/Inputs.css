@@ -1,0 +1,13 @@
+.input-field {
+  margin: 5px;
+  line-height: 25px;
+  border: 2px solid #dc143c;
+  border-radius: 5px;
+  font-size: 100%;
+  background-color: grey;
+  color: #f5c71a;
+}
+
+.input-field::placeholder {
+  color: #f5c71a;
+}
