@@ -1,22 +1,22 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: Dungeon;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #130300;
-  color: #f5c71a;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  background-color: #1D1D1D;
+  color: #fff30f;
 }
 
 @font-face {
-  font-family: 'Ancient Medium';
-  src: local('Ancient Medium'),
-    url('./fonts/ancient_medium.ttf') format('truetype');
+  font-family: 'Enchanted Land';
+  src: local('Enchanted Land'),
+    url('./fonts/enchanted_land.otf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Dungeon';
+  src: local('Dungeon'),
+    url('./fonts/DUNGRG__.TTF') format('truetype');
   font-weight: normal;
 }

@@ -1,9 +1,10 @@
-.deepest-dungeon {
+.app {
   text-align: center;
+  font-size: 2em;
 }
 
-.page-title {
-  font-family: Ancient Medium;
-  color: #dc143c;
+.app .page-title {
+  font-family: Enchanted Land;
+  color: #CF291D;
   font-size: 4em;
 }

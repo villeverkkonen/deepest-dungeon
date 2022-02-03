@@ -1,13 +1,22 @@
 .input-field {
   margin: 5px;
   line-height: 25px;
-  border: 2px solid #dc143c;
+  border: 2px solid #CF291D;
   border-radius: 5px;
-  font-size: 100%;
-  background-color: grey;
-  color: #f5c71a;
+  background-color: #BFBFBF;
+  color: #1D1D1D;
+  font-weight: bold;
+  font-family: Dungeon;
+  font-size: 25px;
 }
 
 .input-field::placeholder {
-  color: #f5c71a;
+  color: #131313;
+  font-family: Dungeon;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #B50717;
+  box-shadow: 0 0 10px #fff30f;
 }

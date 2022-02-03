@@ -5,7 +5,7 @@ import { MonsterType } from './utils/MonsterType';
 import PlayerCountInput from './components/PlayerCountInput';
 import PlayerLevelInput from './components/PlayerLevelInput';
 import MonsterInput from './components/MonsterInput';
-import MonstersList from './components/MonstersList';
+import MonstersTable from './components/MonstersTable';
 
 import './App.css';
 
@@ -47,7 +47,7 @@ function App() {
   }, []);
 
   return (
-    <Container className="deepest-dungeon">
+    <Container className="app">
       <Card>
         <Card.Header as="h1" className="page-title">
           Deepest Dungeon
@@ -68,7 +68,7 @@ function App() {
               monsterInput={monsterInput}
               monsterInputChanged={monsterInputChanged}
             />
-            <MonstersList monsters={filteredMonsters} />
+            <MonstersTable monsters={filteredMonsters} />
           </Card.Body>
         )}
       </Card>

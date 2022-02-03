@@ -18,7 +18,7 @@ export default function MonsterInput({
         type="text"
         value={monsterInput}
         onChange={monsterInputChanged}
-        placeholder="Monster search"
+        placeholder="Search..."
         data-testid="monster-input"
         className="input-field"
       />

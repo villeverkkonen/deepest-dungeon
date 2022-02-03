@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './fonts/ancient_medium.ttf';
+import './fonts/enchanted_land.otf';
+import './fonts/DUNGRG__.TTF';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
