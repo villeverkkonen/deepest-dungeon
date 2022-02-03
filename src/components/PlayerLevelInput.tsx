@@ -14,7 +14,7 @@ export default function PlayerLevelInput({
 }: PlayerLevelInputProps) {
   return (
     <Form.Group>
-      <Form.Label htmlFor="player-level-input">Levels</Form.Label>
+      <Form.Label htmlFor="player-level-input">Level</Form.Label>
       <Form.Control
         type="number"
         value={playerLevel}

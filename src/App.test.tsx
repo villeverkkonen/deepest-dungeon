@@ -37,7 +37,7 @@ test('has a number input for player count', () => {
   const input = playerCountInput();
   expect(input).toBeInTheDocument();
   expect(input).toHaveAttribute('type', 'number');
-  expect(input).toHaveAttribute('placeholder', 'Player count');
+  expect(screen.getByText('Players')).toBeInTheDocument();
 });
 
 test('player count input value changes', () => {
@@ -57,7 +57,7 @@ test('has a number input for player level', () => {
   const input = playerLevelInput();
   expect(input).toBeInTheDocument();
   expect(input).toHaveAttribute('type', 'number');
-  expect(input).toHaveAttribute('placeholder', 'Player level');
+  expect(screen.getByText('Level')).toBeInTheDocument();
 });
 
 test('player level input value changes', () => {
@@ -70,7 +70,7 @@ test('has a text input for monsters', () => {
   const input = monsterInput();
   expect(input).toBeInTheDocument();
   expect(input).toHaveAttribute('type', 'text');
-  expect(input).toHaveAttribute('placeholder', 'Monster search');
+  expect(input).toHaveAttribute('placeholder', 'Search...');
 });
 
 test('monster input value changes to lowercase', () => {
@@ -95,7 +95,7 @@ test('show monsters when monsters input length is two or more', () => {
 
 test('should list filtered monsters by input', () => {
   fireEvent.change(monsterInput(), { target: { value: 'test' } });
+  expect(screen.getByText('Found monsters: 2')).toBeInTheDocument();
   expect(screen.getByText('Test Orc')).toBeInTheDocument();
   expect(screen.getByText('Test Dragon')).toBeInTheDocument();
-  expect(screen.getByText('Found monsters: 2')).toBeInTheDocument();
 });

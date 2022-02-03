@@ -3,8 +3,9 @@
   font-size: 2em;
 }
 
-.app .page-title {
+.page-title {
   font-family: Enchanted Land;
   color: #CF291D;
   font-size: 4em;
+  margin: 0;
 }
