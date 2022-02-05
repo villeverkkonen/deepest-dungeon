@@ -1,11 +1,12 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
+import { playerCountOptions } from '../utils/InputValues';
 
 import '../styles/Inputs.css';
 
 interface PlayerCountInputProps {
   playerCount: string;
-  playerCountInputChanged: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  playerCountInputChanged: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 export default function PlayerCountInput({
@@ -14,15 +15,30 @@ export default function PlayerCountInput({
 }: PlayerCountInputProps) {
   return (
     <Form.Group>
-      <Form.Label htmlFor="player-count-input">Players</Form.Label>
-      <Form.Control
-        type="number"
+      <Form.Label
+        data-testid="player-count-input-label"
+        htmlFor="player-count-input"
+      >
+        Players
+      </Form.Label>
+      <Form.Select
         value={playerCount}
         onChange={playerCountInputChanged}
         id="player-count-input"
         data-testid="player-count-input"
         className="input-field"
-      />
+      >
+        {playerCountOptions.map((option) => {
+          return (
+            <option
+              key={`player-count-${option}`}
+              data-testid={`player-count-${option}`}
+            >
+              {option}
+            </option>
+          );
+        })}
+      </Form.Select>
     </Form.Group>
   );
 }

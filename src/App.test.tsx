@@ -3,6 +3,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import App from './App';
 import * as api from './utils/fetchMonsters';
 import { testMonsters } from './utils/testMonsters';
+import { playerCountOptions, playerLevelOptions } from './utils/InputValues';
 
 function playerCountInput() {
   return screen.getByTestId('player-count-input');
@@ -30,40 +31,41 @@ beforeEach(async () => {
 });
 
 test('show page title', () => {
-  expect(screen.getByText('Deepest Dungeon')).toBeInTheDocument();
+  expect(screen.getByTestId('page-title')).toHaveTextContent('Deepest Dungeon');
 });
 
-test('has a number input for player count', () => {
+test('has a select input for player count with options', () => {
   const input = playerCountInput();
   expect(input).toBeInTheDocument();
-  expect(input).toHaveAttribute('type', 'number');
-  expect(screen.getByText('Players')).toBeInTheDocument();
+  expect(screen.getByTestId('player-count-input-label')).toHaveTextContent(
+    'Players'
+  );
+  playerCountOptions.forEach((option) => {
+    expect(screen.getByTestId(`player-count-${option}`)).toHaveValue(option);
+  });
 });
 
 test('player count input value changes', () => {
   const input = playerCountInput();
-  fireEvent.change(input, { target: { value: 4 } });
-  expect(input).toHaveValue(4);
+  fireEvent.change(input, { target: { value: '4' } });
+  expect(input).toHaveValue('4');
 });
 
-test('player count input does not accept other than number input', () => {
-  const input = playerCountInput();
-  const originalInputValue = input.nodeValue;
-  fireEvent.change(input, { target: { value: 'text' } });
-  expect(input).toHaveValue(originalInputValue);
-});
-
-test('has a number input for player level', () => {
+test('has a select input for players level with options', () => {
   const input = playerLevelInput();
   expect(input).toBeInTheDocument();
-  expect(input).toHaveAttribute('type', 'number');
-  expect(screen.getByText('Level')).toBeInTheDocument();
+  expect(screen.getByTestId('player-level-input-label')).toHaveTextContent(
+    'Level'
+  );
+  playerLevelOptions.forEach((option) => {
+    expect(screen.getByTestId(`player-level-${option}`)).toHaveValue(option);
+  });
 });
 
 test('player level input value changes', () => {
   const input = playerLevelInput();
-  fireEvent.change(input, { target: { value: 8 } });
-  expect(input).toHaveValue(8);
+  fireEvent.change(input, { target: { value: '8' } });
+  expect(input).toHaveValue('8');
 });
 
 test('has a text input for monsters', () => {
@@ -71,12 +73,6 @@ test('has a text input for monsters', () => {
   expect(input).toBeInTheDocument();
   expect(input).toHaveAttribute('type', 'text');
   expect(input).toHaveAttribute('placeholder', 'Search...');
-});
-
-test('monster input value changes to lowercase', () => {
-  const input = monsterInput();
-  fireEvent.change(input, { target: { value: 'Test Dragon' } });
-  expect(input).toHaveValue('Test Dragon');
 });
 
 test('should display no monsters found when input length is less than two', () => {

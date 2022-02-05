@@ -19,11 +19,11 @@ function App() {
   >([]);
   const [loadingMonsters, setLoadingMonsters] = useState<boolean>(true);
 
-  const playerCountInputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const playerCountInputChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPlayerCount(e.target.value);
   };
 
-  const playerLevelInputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const playerLevelInputChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPlayerLevel(e.target.value);
   };
 
@@ -49,7 +49,7 @@ function App() {
   return (
     <Container className="app">
       <Card>
-        <Card.Header as="h1" className="page-title">
+        <Card.Header as="h1" className="page-title" data-testid="page-title">
           Deepest Dungeon
         </Card.Header>
         {loadingMonsters ? (
