@@ -21,6 +21,56 @@ function expectNoMonstersFound() {
   expect(screen.getByText('No monsters found')).toBeInTheDocument();
 }
 
+function searchMonsters(input: string) {
+  fireEvent.change(monsterInput(), { target: { value: input } });
+}
+
+function monstersTableHeaderName() {
+  return screen.getByTestId('monsters-table-header-name');
+}
+
+function monstersTableHeaderCr() {
+  return screen.getByTestId('monsters-table-header-cr');
+}
+
+function sortAndVerifyTableByHeader(header: string) {
+  const inputValue = 'test';
+  let foundMonsters = testMonsters.filter((monster) =>
+    monster.name.toLocaleLowerCase().includes(inputValue)
+  );
+
+  expect(monstersTableHeaderName()).toBeInTheDocument();
+  searchMonsters(inputValue);
+
+  foundMonsters.forEach((monster, index) => {
+    expect(screen.getByTestId(`monster-name-${index + 1}`)).toHaveTextContent(
+      monster.name
+    );
+    expect(screen.getByTestId(`monster-cr-${index + 1}`)).toHaveTextContent(
+      monster.challenge_rating
+    );
+  });
+
+  if (header === 'name') {
+    fireEvent.click(monstersTableHeaderName());
+  } else {
+    fireEvent.click(monstersTableHeaderCr());
+  }
+
+  foundMonsters = foundMonsters.sort((a, b) =>
+    a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+  );
+
+  foundMonsters.forEach((monster, index) => {
+    expect(screen.getByTestId(`monster-name-${index + 1}`)).toHaveTextContent(
+      monster.name
+    );
+    expect(screen.getByTestId(`monster-cr-${index + 1}`)).toHaveTextContent(
+      monster.challenge_rating
+    );
+  });
+}
+
 beforeEach(async () => {
   const mock = jest.spyOn(api, 'fetchMonsters').mockResolvedValue(testMonsters);
   render(<App />);
@@ -77,14 +127,14 @@ test('has a text input for monsters', () => {
 
 test('should display no monsters found when input length is less than two', () => {
   expectNoMonstersFound();
-  fireEvent.change(monsterInput(), { target: { value: 'a' } });
+  searchMonsters('a');
   expectNoMonstersFound();
   expect(screen.queryByText('Found monsters')).not.toBeInTheDocument();
 });
 
 test('show monsters when monsters input length is two or more', () => {
   expectNoMonstersFound();
-  fireEvent.change(monsterInput(), { target: { value: 'dr' } });
+  searchMonsters('dr');
   expect(screen.queryByText('No monsters found')).not.toBeInTheDocument();
   expect(screen.getByText('Found monsters: 1')).toBeInTheDocument();
 });
@@ -95,14 +145,10 @@ test('should show monsters on table by search input', () => {
     monster.name.toLocaleLowerCase().includes(inputValue)
   );
 
-  expect(screen.getByTestId('monsters-table-header-name')).toHaveTextContent(
-    'Name'
-  );
-  expect(screen.getByTestId('monsters-table-header-cr')).toHaveTextContent(
-    'CR'
-  );
+  expect(monstersTableHeaderName()).toHaveTextContent('Name');
+  expect(monstersTableHeaderCr()).toHaveTextContent('CR');
 
-  fireEvent.change(monsterInput(), { target: { value: inputValue } });
+  searchMonsters(inputValue);
   expect(
     screen.getByText(`Found monsters: ${foundMonsters.length}`)
   ).toBeInTheDocument();
@@ -115,4 +161,12 @@ test('should show monsters on table by search input', () => {
       monster.challenge_rating
     );
   });
+});
+
+test('should order monsters table by name', () => {
+  sortAndVerifyTableByHeader('name');
+});
+
+test('should order monsters table by challenge rating', () => {
+  sortAndVerifyTableByHeader('cr');
 });

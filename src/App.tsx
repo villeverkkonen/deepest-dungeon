@@ -42,8 +42,11 @@ function App() {
   };
 
   useEffect(() => {
-    fetchMonsters().then((monsters) => setMonsters(monsters));
-    setLoadingMonsters(false);
+    const fetch = async () => {
+      await fetchMonsters().then((monsters) => setMonsters(monsters));
+      setLoadingMonsters(false);
+    };
+    fetch();
   }, []);
 
   return (
