@@ -20,14 +20,20 @@ export default function MonstersTable({ monsters }: MonstersTableProps) {
       <Table id="monsters-table">
         <thead>
           <tr>
-            <th>Name</th>
+            <th data-testid="monsters-table-header-name">Name</th>
+            <th data-testid="monsters-table-header-cr">CR</th>
           </tr>
         </thead>
         <tbody>
-          {monsters.map((monster) => {
+          {monsters.map((monster, index) => {
             return (
               <tr>
-                <td>{monster.name}</td>
+                <td data-testid={`monster-name-${index + 1}`}>
+                  {monster.name}
+                </td>
+                <td data-testid={`monster-cr-${index + 1}`}>
+                  {monster.challenge_rating}
+                </td>
               </tr>
             );
           })}

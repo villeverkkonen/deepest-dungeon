@@ -89,9 +89,30 @@ test('show monsters when monsters input length is two or more', () => {
   expect(screen.getByText('Found monsters: 1')).toBeInTheDocument();
 });
 
-test('should list filtered monsters by input', () => {
-  fireEvent.change(monsterInput(), { target: { value: 'test' } });
-  expect(screen.getByText('Found monsters: 2')).toBeInTheDocument();
-  expect(screen.getByText('Test Orc')).toBeInTheDocument();
-  expect(screen.getByText('Test Dragon')).toBeInTheDocument();
+test('should show monsters on table by search input', () => {
+  const inputValue = 'test';
+  const foundMonsters = testMonsters.filter((monster) =>
+    monster.name.toLocaleLowerCase().includes(inputValue)
+  );
+
+  expect(screen.getByTestId('monsters-table-header-name')).toHaveTextContent(
+    'Name'
+  );
+  expect(screen.getByTestId('monsters-table-header-cr')).toHaveTextContent(
+    'CR'
+  );
+
+  fireEvent.change(monsterInput(), { target: { value: inputValue } });
+  expect(
+    screen.getByText(`Found monsters: ${foundMonsters.length}`)
+  ).toBeInTheDocument();
+
+  foundMonsters.forEach((monster, index) => {
+    expect(screen.getByTestId(`monster-name-${index + 1}`)).toHaveTextContent(
+      monster.name
+    );
+    expect(screen.getByTestId(`monster-cr-${index + 1}`)).toHaveTextContent(
+      monster.challenge_rating
+    );
+  });
 });
