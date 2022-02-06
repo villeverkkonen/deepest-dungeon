@@ -71,7 +71,10 @@ function App() {
               monsterInput={monsterInput}
               monsterInputChanged={monsterInputChanged}
             />
-            <MonstersTable monsters={filteredMonsters} />
+            <MonstersTable
+              monsters={filteredMonsters}
+              monsterInput={monsterInput}
+            />
           </Card.Body>
         )}
       </Card>

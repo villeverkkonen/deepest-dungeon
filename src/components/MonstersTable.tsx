@@ -6,6 +6,7 @@ import '../styles/Monsters.css';
 
 interface MonstersTableProps {
   monsters: ReadonlyArray<MonsterType>;
+  monsterInput: string;
 }
 
 interface SortConfig {
@@ -15,10 +16,14 @@ interface SortConfig {
 
 const sortMonsters = (
   monsters: ReadonlyArray<MonsterType>,
-  sortConfig: SortConfig
+  sortConfig: SortConfig | null
 ) => {
   let sortedMonsters: MonsterType[] = [...monsters];
   sortedMonsters.sort((a: MonsterType, b: MonsterType) => {
+    console.log(sortConfig);
+    if (sortConfig === null) {
+      return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
+    }
     if (
       a[sortConfig.key as keyof MonsterType] <
       b[sortConfig.key as keyof MonsterType]
@@ -29,18 +34,18 @@ const sortMonsters = (
       a[sortConfig.key as keyof MonsterType] >
       b[sortConfig.key as keyof MonsterType]
     ) {
-      return sortConfig.direction === 'desc' ? 1 : -1;
+      return sortConfig.direction === 'asc' ? 1 : -1;
     }
     return 0;
   });
   return sortedMonsters;
 };
 
-export default function MonstersTable({ monsters }: MonstersTableProps) {
-  const [sortConfig, setSortConfig] = useState<SortConfig>({
-    key: 'name',
-    direction: 'desc',
-  });
+export default function MonstersTable({
+  monsters,
+  monsterInput,
+}: MonstersTableProps) {
+  const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
 
   const sortedMonsters = sortMonsters(monsters, sortConfig);
 
@@ -54,47 +59,51 @@ export default function MonstersTable({ monsters }: MonstersTableProps) {
 
   return (
     <>
-      {monsters.length === 0 ? (
-        <span>No monsters found</span>
-      ) : (
-        <span>Found monsters: {monsters.length}</span>
-      )}
+      {monsterInput.length > 1 ? (
+        monsters.length === 0 ? (
+          <span>No monsters found</span>
+        ) : (
+          <>
+            <span>Found monsters: {monsters.length}</span>
 
-      <Table id="monsters-table">
-        <thead>
-          <tr>
-            <th
-              data-testid="monsters-table-header-name"
-              onClick={() => requestSort('name')}
-            >
-              Name
-            </th>
-            <th
-              data-testid="monsters-table-header-cr"
-              onClick={() => requestSort('challenge_rating')}
-            >
-              CR
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedMonsters.map((monster, index) => {
-            return (
-              <tr
-                key={`monster-${index + 1}`}
-                data-testid="monsters-table-body-row"
-              >
-                <td data-testid={`monster-name-${index + 1}`}>
-                  {monster.name}
-                </td>
-                <td data-testid={`monster-cr-${index + 1}`}>
-                  {monster.challenge_rating}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+            <Table id="monsters-table" data-testid="monsters-table">
+              <thead>
+                <tr>
+                  <th
+                    data-testid="monsters-table-header-name"
+                    onClick={() => requestSort('name')}
+                  >
+                    Name
+                  </th>
+                  <th
+                    data-testid="monsters-table-header-cr"
+                    onClick={() => requestSort('challenge_rating')}
+                  >
+                    CR
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedMonsters.map((monster, index) => {
+                  return (
+                    <tr
+                      key={`monster-${index + 1}`}
+                      data-testid="monsters-table-body-row"
+                    >
+                      <td data-testid={`monster-name-${index + 1}`}>
+                        {monster.name}
+                      </td>
+                      <td data-testid={`monster-cr-${index + 1}`}>
+                        {monster.challenge_rating}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </>
+        )
+      ) : null}
     </>
   );
 }

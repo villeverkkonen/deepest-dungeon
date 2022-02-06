@@ -1,9 +1,11 @@
 # Deepest Dungeon
 
-Data for Dungeons & Dragons
+Dungeons & Dragons fight calculator
 
 ## Technologies and methods
 
-Frontend: React with TypeScript, Test-driven development (TDD) with Jest
+Test-driven development (TDD)
 <br>
-Backend: Python with Flask
+Frontend: React, TypeScrip, Jest
+<br>
+Backend: Python, Flask

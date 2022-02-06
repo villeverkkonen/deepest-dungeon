@@ -21,6 +21,10 @@ function expectNoMonstersFound() {
   expect(screen.getByText('No monsters found')).toBeInTheDocument();
 }
 
+function expectNotNoMonstersFound() {
+  expect(screen.queryByText('No monsters found')).not.toBeInTheDocument();
+}
+
 function searchMonsters(input: string) {
   fireEvent.change(monsterInput(), { target: { value: input } });
 }
@@ -33,33 +37,44 @@ function monstersTableHeaderCr() {
   return screen.getByTestId('monsters-table-header-cr');
 }
 
-function sortAndVerifyTableByHeader(header: string) {
+function sortedTestMonstersWithInput(inputValue: string) {
+  return testMonsters
+    .filter((monster) => monster.name.toLocaleLowerCase().includes(inputValue))
+    .sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
+}
+
+function sortAndVerifyTableByHeader(sortBy: string, sortOrder: string) {
   const inputValue = 'test';
-  let foundMonsters = testMonsters.filter((monster) =>
-    monster.name.toLocaleLowerCase().includes(inputValue)
-  );
+  let foundMonsters = sortedTestMonstersWithInput(inputValue);
 
-  expect(monstersTableHeaderName()).toBeInTheDocument();
   searchMonsters(inputValue);
+  expect(monstersTableHeaderName()).toBeInTheDocument();
 
-  foundMonsters.forEach((monster, index) => {
-    expect(screen.getByTestId(`monster-name-${index + 1}`)).toHaveTextContent(
-      monster.name
-    );
-    expect(screen.getByTestId(`monster-cr-${index + 1}`)).toHaveTextContent(
-      monster.challenge_rating
-    );
-  });
-
-  if (header === 'name') {
+  if (sortBy === 'name') {
     fireEvent.click(monstersTableHeaderName());
-  } else {
+    foundMonsters.sort((a, b) => {
+      if (sortOrder === 'asc') {
+        return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
+      }
+      return a.name > b.name ? -1 : b.name > a.name ? 1 : 0;
+    });
+  } else if (sortBy === 'cr') {
     fireEvent.click(monstersTableHeaderCr());
+    foundMonsters.sort((a, b) => {
+      if (sortOrder === 'asc') {
+        return a.challenge_rating > b.challenge_rating
+          ? 1
+          : b.challenge_rating > a.challenge_rating
+          ? -1
+          : 0;
+      }
+      return a.challenge_rating > b.challenge_rating
+        ? -1
+        : b.challenge_rating > a.challenge_rating
+        ? 1
+        : 0;
+    });
   }
-
-  foundMonsters = foundMonsters.sort((a, b) =>
-    a.name > b.name ? 1 : b.name > a.name ? -1 : 0
-  );
 
   foundMonsters.forEach((monster, index) => {
     expect(screen.getByTestId(`monster-name-${index + 1}`)).toHaveTextContent(
@@ -125,33 +140,32 @@ test('has a text input for monsters', () => {
   expect(input).toHaveAttribute('placeholder', 'Search...');
 });
 
-test('should display no monsters found when input length is less than two', () => {
-  expectNoMonstersFound();
+test('no monsters found when input length is two or more and no matches', () => {
+  expectNotNoMonstersFound();
   searchMonsters('a');
+  expectNotNoMonstersFound();
+  searchMonsters('zx');
   expectNoMonstersFound();
-  expect(screen.queryByText('Found monsters')).not.toBeInTheDocument();
 });
 
 test('show monsters when monsters input length is two or more', () => {
-  expectNoMonstersFound();
+  expectNotNoMonstersFound();
   searchMonsters('dr');
-  expect(screen.queryByText('No monsters found')).not.toBeInTheDocument();
+  expectNotNoMonstersFound();
   expect(screen.getByText('Found monsters: 1')).toBeInTheDocument();
 });
 
 test('should show monsters on table by search input', () => {
   const inputValue = 'test';
-  const foundMonsters = testMonsters.filter((monster) =>
-    monster.name.toLocaleLowerCase().includes(inputValue)
-  );
+  const foundMonsters = sortedTestMonstersWithInput(inputValue);
 
-  expect(monstersTableHeaderName()).toHaveTextContent('Name');
-  expect(monstersTableHeaderCr()).toHaveTextContent('CR');
-
+  expect(screen.queryByTestId('monsters-table')).not.toBeInTheDocument();
   searchMonsters(inputValue);
   expect(
     screen.getByText(`Found monsters: ${foundMonsters.length}`)
   ).toBeInTheDocument();
+  expect(monstersTableHeaderName()).toHaveTextContent('Name');
+  expect(monstersTableHeaderCr()).toHaveTextContent('CR');
 
   foundMonsters.forEach((monster, index) => {
     expect(screen.getByTestId(`monster-name-${index + 1}`)).toHaveTextContent(
@@ -164,9 +178,11 @@ test('should show monsters on table by search input', () => {
 });
 
 test('should order monsters table by name', () => {
-  sortAndVerifyTableByHeader('name');
+  sortAndVerifyTableByHeader('name', 'asc');
+  sortAndVerifyTableByHeader('name', 'desc');
 });
 
 test('should order monsters table by challenge rating', () => {
-  sortAndVerifyTableByHeader('cr');
+  sortAndVerifyTableByHeader('cr', 'asc');
+  sortAndVerifyTableByHeader('cr', 'desc');
 });
