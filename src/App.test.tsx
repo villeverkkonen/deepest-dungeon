@@ -43,6 +43,16 @@ function sortedTestMonstersWithInput(inputValue: string) {
     .sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
 }
 
+function challengeRatingConverted(cr: string) {
+  if (cr === '0.25') {
+    return '1/4';
+  }
+  if (cr === '0.5') {
+    return '1/2';
+  }
+  return cr;
+}
+
 function sortAndVerifyTableByHeader(sortBy: string, sortOrder: string) {
   const inputValue = 'test';
   let foundMonsters = sortedTestMonstersWithInput(inputValue);
@@ -81,7 +91,7 @@ function sortAndVerifyTableByHeader(sortBy: string, sortOrder: string) {
       monster.name
     );
     expect(screen.getByTestId(`monster-cr-${index + 1}`)).toHaveTextContent(
-      monster.challenge_rating
+      challengeRatingConverted(monster.challenge_rating)
     );
   });
 }
@@ -155,7 +165,7 @@ test('show monsters when monsters input length is two or more', () => {
   expect(screen.getByText('Found monsters: 1')).toBeInTheDocument();
 });
 
-test('should show monsters on table by search input', () => {
+test('should show monsters with name, cr and button on table by search input', () => {
   const inputValue = 'test';
   const foundMonsters = sortedTestMonstersWithInput(inputValue);
 
@@ -172,7 +182,7 @@ test('should show monsters on table by search input', () => {
       monster.name
     );
     expect(screen.getByTestId(`monster-cr-${index + 1}`)).toHaveTextContent(
-      monster.challenge_rating
+      challengeRatingConverted(monster.challenge_rating)
     );
   });
 });

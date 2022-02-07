@@ -57,6 +57,16 @@ export default function MonstersTable({
     setSortConfig({ key, direction });
   };
 
+  function challengeRatingConverted(cr: string) {
+    if (cr === '0.25') {
+      return '1/4';
+    }
+    if (cr === '0.5') {
+      return '1/2';
+    }
+    return cr;
+  }
+
   return (
     <>
       {monsterInput.length > 1 ? (
@@ -94,7 +104,7 @@ export default function MonstersTable({
                         {monster.name}
                       </td>
                       <td data-testid={`monster-cr-${index + 1}`}>
-                        {monster.challenge_rating}
+                        {challengeRatingConverted(monster.challenge_rating)}
                       </td>
                     </tr>
                   );

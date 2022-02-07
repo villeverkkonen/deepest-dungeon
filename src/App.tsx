@@ -59,18 +59,22 @@ function App() {
           <p>Loading...</p>
         ) : (
           <Card.Body>
-            <PlayerCountInput
-              playerCount={playerCount}
-              playerCountInputChanged={playerCountInputChanged}
-            />
-            <PlayerLevelInput
-              playerLevel={playerLevel}
-              playerLevelInputChanged={playerLevelInputChanged}
-            />
-            <MonsterInput
-              monsterInput={monsterInput}
-              monsterInputChanged={monsterInputChanged}
-            />
+            <div className="inputs">
+              <div className="dropdown-inputs">
+                <PlayerCountInput
+                  playerCount={playerCount}
+                  playerCountInputChanged={playerCountInputChanged}
+                />
+                <PlayerLevelInput
+                  playerLevel={playerLevel}
+                  playerLevelInputChanged={playerLevelInputChanged}
+                />
+              </div>
+              <MonsterInput
+                monsterInput={monsterInput}
+                monsterInputChanged={monsterInputChanged}
+              />
+            </div>
             <MonstersTable
               monsters={filteredMonsters}
               monsterInput={monsterInput}
