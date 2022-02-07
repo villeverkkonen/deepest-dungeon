@@ -7,9 +7,20 @@ app = Flask(__name__)
 
 @app.route("/monsters")
 def get_monsters():
-    response = requests.get(BASE_URL + "/monsters?limit=1500")
+    response = requests.get(BASE_URL + "/monsters?limit=2000")
     if response.ok:
-        return response.json()
+        filteredMonsters = {"results": []}
+
+        for monster in response.json()["results"]:
+            challengeRating = monster["challenge_rating"]
+            if monster["challenge_rating"] == "1/4":
+                challengeRating = "0.25"
+            if monster["challenge_rating"] == "1/2":
+                challengeRating = "0.5"
+            filteredMonsters["results"].append(
+                {"name": monster["name"], "challenge_rating": challengeRating})
+
+        return filteredMonsters
     else:
         return None
 
