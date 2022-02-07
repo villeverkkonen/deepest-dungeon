@@ -184,6 +184,9 @@ test('should show monsters with name, cr and button on table by search input', (
     expect(screen.getByTestId(`monster-cr-${index + 1}`)).toHaveTextContent(
       challengeRatingConverted(monster.challenge_rating)
     );
+    expect(
+      screen.getByTestId(`monster-add-btn-${index + 1}`)
+    ).toHaveTextContent('+');
   });
 });
 
