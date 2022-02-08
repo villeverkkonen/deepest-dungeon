@@ -18,8 +18,8 @@ export const testMonsters: ReadonlyArray<MonsterType> = [
     challenge_rating: '1',
   },
   {
-    name: 'Test Goblin',
-    challenge_rating: '0.25',
+    name: 'Test Beholder',
+    challenge_rating: '8',
   },
   {
     name: 'Test Orc',

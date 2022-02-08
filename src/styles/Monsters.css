@@ -1,4 +1,5 @@
-#monsters-table {
+#monsters-table,
+#enemies-table {
   background-color: #bfbfbf;
   color: #131313;
   border-radius: 20px;
@@ -9,7 +10,8 @@
   box-shadow: 0 0 10px #fff30f;
 }
 
-#monsters-table td {
+#monsters-table td,
+#enemies-table td {
   border: 1px solid #1d1d1d;
 }
 

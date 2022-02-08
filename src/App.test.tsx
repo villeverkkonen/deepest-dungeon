@@ -4,6 +4,7 @@ import App from './App';
 import * as api from './utils/fetchMonsters';
 import { testMonsters } from './utils/testMonsters';
 import { playerCountOptions, playerLevelOptions } from './utils/InputValues';
+import { challengeRatingConverted } from './utils/MonsterType';
 
 function playerCountInput() {
   return screen.getByTestId('player-count-input');
@@ -43,14 +44,8 @@ function sortedTestMonstersWithInput(inputValue: string) {
     .sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
 }
 
-function challengeRatingConverted(cr: string) {
-  if (cr === '0.25') {
-    return '1/4';
-  }
-  if (cr === '0.5') {
-    return '1/2';
-  }
-  return cr;
+function clickAddMonster(index: number) {
+  fireEvent.click(screen.getByTestId(`monster-add-btn-${index}`));
 }
 
 function sortAndVerifyTableByHeader(sortBy: string, sortOrder: string) {
@@ -198,4 +193,28 @@ test('should order monsters table by name', () => {
 test('should order monsters table by challenge rating', () => {
   sortAndVerifyTableByHeader('cr', 'asc');
   sortAndVerifyTableByHeader('cr', 'desc');
+});
+
+test('should be able to add monsters as enemy', () => {
+  expect(screen.queryByTestId('enemies-table')).not.toBeInTheDocument();
+  const inputValue = 'test';
+  const foundMonsters = sortedTestMonstersWithInput(inputValue);
+  searchMonsters(inputValue);
+  let monstersAdded = 0;
+  foundMonsters.forEach((monster, index) => {
+    if ((index + 1) % 2 === 0) {
+      clickAddMonster(index + 1 - monstersAdded);
+      monstersAdded++;
+      expect(screen.getByTestId('enemies-table')).toBeInTheDocument();
+      expect(
+        screen.getByTestId(`enemy-name-${monstersAdded}`)
+      ).toHaveTextContent(monster.name);
+      expect(screen.getByTestId(`enemy-cr-${monstersAdded}`)).toHaveTextContent(
+        challengeRatingConverted(monster.challenge_rating)
+      );
+      expect(
+        screen.getByTestId(`enemy-remove-btn-${monstersAdded}`)
+      ).toHaveTextContent('-');
+    }
+  });
 });

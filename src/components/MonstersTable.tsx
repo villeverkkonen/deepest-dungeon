@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Table } from 'react-bootstrap';
-import { MonsterType } from '../utils/MonsterType';
+import { challengeRatingConverted, MonsterType } from '../utils/MonsterType';
 
 import '../styles/Monsters.css';
 
 interface MonstersTableProps {
   monsters: ReadonlyArray<MonsterType>;
   monsterInput: string;
+  addEnemy: (monster: MonsterType) => void;
 }
 
 interface SortConfig {
@@ -20,7 +21,6 @@ const sortMonsters = (
 ) => {
   let sortedMonsters: MonsterType[] = [...monsters];
   sortedMonsters.sort((a: MonsterType, b: MonsterType) => {
-    console.log(sortConfig);
     if (sortConfig === null) {
       return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
     }
@@ -44,6 +44,7 @@ const sortMonsters = (
 export default function MonstersTable({
   monsters,
   monsterInput,
+  addEnemy,
 }: MonstersTableProps) {
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
 
@@ -56,16 +57,6 @@ export default function MonstersTable({
     }
     setSortConfig({ key, direction });
   };
-
-  function challengeRatingConverted(cr: string) {
-    if (cr === '0.25') {
-      return '1/4';
-    }
-    if (cr === '0.5') {
-      return '1/2';
-    }
-    return cr;
-  }
 
   return (
     <>
@@ -113,6 +104,7 @@ export default function MonstersTable({
                         <button
                           data-testid={`monster-add-btn-${index + 1}`}
                           className="hoverable"
+                          onClick={() => addEnemy(monster)}
                         >
                           +
                         </button>
