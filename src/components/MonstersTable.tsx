@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Table } from 'react-bootstrap';
-import { challengeRatingConverted, MonsterType } from '../utils/MonsterType';
+import { challengeRatingConverted, Monster } from '../utils/Monster';
 
 import '../styles/Monsters.css';
 
 interface MonstersTableProps {
-  monsters: ReadonlyArray<MonsterType>;
+  monsters: ReadonlyArray<Monster>;
   monsterInput: string;
-  addEnemy: (monster: MonsterType) => void;
+  addEnemy: (monster: Monster) => void;
 }
 
 interface SortConfig {
@@ -16,23 +16,23 @@ interface SortConfig {
 }
 
 const sortMonsters = (
-  monsters: ReadonlyArray<MonsterType>,
+  monsters: ReadonlyArray<Monster>,
   sortConfig: SortConfig | null
 ) => {
-  let sortedMonsters: MonsterType[] = [...monsters];
-  sortedMonsters.sort((a: MonsterType, b: MonsterType) => {
+  let sortedMonsters: Monster[] = [...monsters];
+  sortedMonsters.sort((a: Monster, b: Monster) => {
     if (sortConfig === null) {
       return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
     }
     if (
-      a[sortConfig.key as keyof MonsterType] <
-      b[sortConfig.key as keyof MonsterType]
+      a[sortConfig.key as keyof Monster] <
+      b[sortConfig.key as keyof Monster]
     ) {
       return sortConfig.direction === 'asc' ? -1 : 1;
     }
     if (
-      a[sortConfig.key as keyof MonsterType] >
-      b[sortConfig.key as keyof MonsterType]
+      a[sortConfig.key as keyof Monster] >
+      b[sortConfig.key as keyof Monster]
     ) {
       return sortConfig.direction === 'asc' ? 1 : -1;
     }

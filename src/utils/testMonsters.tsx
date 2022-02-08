@@ -1,6 +1,6 @@
-import { MonsterType } from './MonsterType';
+import { Monster } from './Monster';
 
-export const testMonsters: ReadonlyArray<MonsterType> = [
+export const testMonsters: ReadonlyArray<Monster> = [
   {
     name: 'Test Goblin',
     challenge_rating: '0.25',

@@ -4,7 +4,7 @@ import App from './App';
 import * as api from './utils/fetchMonsters';
 import { testMonsters } from './utils/testMonsters';
 import { playerCountOptions, playerLevelOptions } from './utils/InputValues';
-import { challengeRatingConverted } from './utils/MonsterType';
+import { challengeRatingConverted } from './utils/Monster';
 
 function playerCountInput() {
   return screen.getByTestId('player-count-input');

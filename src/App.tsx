@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Container } from 'react-bootstrap';
 import { fetchMonsters } from './utils/fetchMonsters';
-import { MonsterType } from './utils/MonsterType';
+import { Monster } from './utils/Monster';
 import PlayerCountInput from './components/PlayerCountInput';
 import PlayerLevelInput from './components/PlayerLevelInput';
 import MonsterInput from './components/MonsterInput';
@@ -14,12 +14,12 @@ function App() {
   const [playerCount, setPlayerCount] = useState<string>('');
   const [playerLevel, setPlayerLevel] = useState<string>('');
   const [monsterInput, setMonsterInput] = useState<string>('');
-  const [monsters, setMonsters] = useState<ReadonlyArray<MonsterType>>([]);
+  const [monsters, setMonsters] = useState<ReadonlyArray<Monster>>([]);
   const [filteredMonsters, setFilteredMonsters] = useState<
-    ReadonlyArray<MonsterType>
+    ReadonlyArray<Monster>
   >([]);
   const [loadingMonsters, setLoadingMonsters] = useState<boolean>(true);
-  const [enemies, setEnemies] = useState<ReadonlyArray<MonsterType>>([]);
+  const [enemies, setEnemies] = useState<ReadonlyArray<Monster>>([]);
 
   const playerCountInputChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPlayerCount(e.target.value);
@@ -43,7 +43,7 @@ function App() {
     }
   };
 
-  const addEnemy = (enemy: MonsterType) => {
+  const addEnemy = (enemy: Monster) => {
     setFilteredMonsters(
       filteredMonsters.filter((monster) => monster.name !== enemy.name)
     );

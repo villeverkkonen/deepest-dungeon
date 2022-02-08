@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Table } from 'react-bootstrap';
-import { challengeRatingConverted, MonsterType } from '../utils/MonsterType';
+import { challengeRatingConverted, Monster } from '../utils/Monster';
 
 import '../styles/Monsters.css';
 
 interface EnemiesTableProps {
-  enemies: ReadonlyArray<MonsterType>;
+  enemies: ReadonlyArray<Monster>;
 }
 
 interface SortConfig {
