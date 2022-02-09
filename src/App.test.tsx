@@ -213,7 +213,9 @@ test('should be able to add monsters as enemy and remove them', () => {
       enemies = [...enemies, monster];
       monstersAdded++;
 
+      // Enemies table checks
       expect(screen.getByTestId('enemies-table')).toBeInTheDocument();
+      expect(screen.getByText(`Enemies: ${monstersAdded}`)).toBeInTheDocument();
       expect(
         screen.getByTestId(`enemy-name-${monstersAdded}`)
       ).toHaveTextContent(monster.name);
@@ -240,6 +242,13 @@ test('should be able to add monsters as enemy and remove them', () => {
     expect(
       screen.queryByTestId(`enemy-name-${index + 1 - enemiesRemoved}`)
     ).not.toBeInTheDocument();
+    if (monstersAdded - enemiesRemoved === 0) {
+      expect(screen.queryByText('Enemies:')).not.toBeInTheDocument();
+    } else {
+      expect(
+        screen.getByText(`Enemies: ${monstersAdded - enemiesRemoved}`)
+      ).toBeInTheDocument();
+    }
 
     foundMonsters = [...foundMonsters, enemy].sort((a, b) =>
       a.name > b.name ? 1 : b.name > a.name ? -1 : 0

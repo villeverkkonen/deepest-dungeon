@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Table } from 'react-bootstrap';
 import { challengeRatingConverted, Monster } from '../utils/Monster';
 
@@ -6,24 +6,13 @@ import '../styles/Monsters.css';
 
 interface EnemiesTableProps {
   enemies: ReadonlyArray<Monster>;
+  removeEnemy: (enemy: Monster) => void;
 }
 
-interface SortConfig {
-  key: string;
-  direction: string;
-}
-
-export default function EnemiesTable({ enemies }: EnemiesTableProps) {
-  const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
-
-  const requestSort = (key: string) => {
-    let direction = 'asc';
-    if (sortConfig?.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
-    }
-    setSortConfig({ key, direction });
-  };
-
+export default function EnemiesTable({
+  enemies,
+  removeEnemy,
+}: EnemiesTableProps) {
   if (enemies.length === 0) {
     return null;
   }
@@ -34,18 +23,10 @@ export default function EnemiesTable({ enemies }: EnemiesTableProps) {
       <Table id="enemies-table" data-testid="enemies-table">
         <thead>
           <tr>
-            <th
-              data-testid="enemies-table-header-name"
-              className="hoverable"
-              onClick={() => requestSort('name')}
-            >
+            <th data-testid="enemies-table-header-name" className="hoverable">
               Name
             </th>
-            <th
-              data-testid="enemies-table-header-cr"
-              className="hoverable"
-              onClick={() => requestSort('challenge_rating')}
-            >
+            <th data-testid="enemies-table-header-cr" className="hoverable">
               CR
             </th>
             <th />
@@ -66,6 +47,7 @@ export default function EnemiesTable({ enemies }: EnemiesTableProps) {
                   <button
                     data-testid={`enemy-remove-btn-${index + 1}`}
                     className="hoverable"
+                    onClick={() => removeEnemy(enemy)}
                   >
                     -
                   </button>

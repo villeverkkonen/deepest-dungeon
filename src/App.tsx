@@ -50,6 +50,11 @@ function App() {
     setEnemies([...enemies, enemy]);
   };
 
+  const removeEnemy = (enemy: Monster) => {
+    setFilteredMonsters([...filteredMonsters, enemy]);
+    setEnemies(enemies.filter((monster) => monster.name !== enemy.name));
+  };
+
   useEffect(() => {
     const fetch = async () => {
       await fetchMonsters().then((monsters) => setMonsters(monsters));
@@ -84,7 +89,7 @@ function App() {
                 monsterInputChanged={monsterInputChanged}
               />
             </div>
-            <EnemiesTable enemies={enemies} />
+            <EnemiesTable enemies={enemies} removeEnemy={removeEnemy} />
             <MonstersTable
               monsters={filteredMonsters}
               monsterInput={monsterInput}
