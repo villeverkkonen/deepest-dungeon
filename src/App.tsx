@@ -51,7 +51,11 @@ function App() {
   };
 
   const removeEnemy = (enemy: Monster) => {
-    setFilteredMonsters([...filteredMonsters, enemy]);
+    // Add removed enemy back to monsters table
+    // if it still matches the search input
+    if (enemy.name.toLowerCase().includes(monsterInput.toLowerCase())) {
+      setFilteredMonsters([...filteredMonsters, enemy]);
+    }
     setEnemies(enemies.filter((monster) => monster.name !== enemy.name));
   };
 

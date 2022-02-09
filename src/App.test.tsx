@@ -266,8 +266,7 @@ test('should be able to add monsters as enemy and remove them', () => {
       ).not.toHaveTextContent(enemy.name);
     }
 
-    // Removed monster from enemy table should appear back
-    // to monsters table
+    // Removed enemy from enemy table goes back to monsters table
     foundMonsters = [...foundMonsters, enemy].sort((a, b) =>
       a.name > b.name ? 1 : b.name > a.name ? -1 : 0
     );
@@ -276,4 +275,25 @@ test('should be able to add monsters as enemy and remove them', () => {
       screen.getByTestId(`monster-name-${monsterIndex}`)
     ).toHaveTextContent(enemy.name);
   });
+});
+
+test('removed enemy from enemies table goes back to monsters table if search input still matches', () => {
+  searchMonsters('test dragon');
+  clickAddMonster(1);
+  const secondInput = 'monster';
+  searchMonsters(secondInput);
+  const foundMonsters = sortedTestMonstersWithInput(secondInput);
+  clickRemoveMonster(1);
+
+  // Monsters table should have only monsters by second search input
+  foundMonsters.forEach((monster, index) => {
+    const monsterId = index + 1;
+    const monsterNameElement = screen.getByTestId(`monster-name-${monsterId}`);
+    expect(monsterNameElement).toHaveTextContent(monster.name);
+    expect(monsterNameElement).not.toHaveTextContent(secondInput);
+  });
+  // There should be no more rows than found by search input
+  expect(
+    screen.queryByTestId(`monster-name-${foundMonsters.length + 1}`)
+  ).not.toBeInTheDocument();
 });
