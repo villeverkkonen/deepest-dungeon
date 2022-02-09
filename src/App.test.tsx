@@ -4,7 +4,7 @@ import App from './App';
 import * as api from './utils/fetchMonsters';
 import { testMonsters } from './utils/testMonsters';
 import { playerCountOptions, playerLevelOptions } from './utils/InputValues';
-import { challengeRatingConverted } from './utils/Monster';
+import { challengeRatingConverted, Monster } from './utils/Monster';
 
 function playerCountInput() {
   return screen.getByTestId('player-count-input');
@@ -46,6 +46,10 @@ function sortedTestMonstersWithInput(inputValue: string) {
 
 function clickAddMonster(index: number) {
   fireEvent.click(screen.getByTestId(`monster-add-btn-${index}`));
+}
+
+function clickRemoveMonster(index: number) {
+  fireEvent.click(screen.getByTestId(`enemy-remove-btn-${index}`));
 }
 
 function sortAndVerifyTableByHeader(sortBy: string, sortOrder: string) {
@@ -195,16 +199,20 @@ test('should order monsters table by challenge rating', () => {
   sortAndVerifyTableByHeader('cr', 'desc');
 });
 
-test('should be able to add monsters as enemy', () => {
+test('should be able to add monsters as enemy and remove them', () => {
   expect(screen.queryByTestId('enemies-table')).not.toBeInTheDocument();
   const inputValue = 'test';
-  const foundMonsters = sortedTestMonstersWithInput(inputValue);
+  let foundMonsters = sortedTestMonstersWithInput(inputValue);
   searchMonsters(inputValue);
   let monstersAdded = 0;
+  let enemies: ReadonlyArray<Monster> = [];
   foundMonsters.forEach((monster, index) => {
+    // Add every second monster
     if ((index + 1) % 2 === 0) {
       clickAddMonster(index + 1 - monstersAdded);
+      enemies = [...enemies, monster];
       monstersAdded++;
+
       expect(screen.getByTestId('enemies-table')).toBeInTheDocument();
       expect(
         screen.getByTestId(`enemy-name-${monstersAdded}`)
@@ -215,6 +223,30 @@ test('should be able to add monsters as enemy', () => {
       expect(
         screen.getByTestId(`enemy-remove-btn-${monstersAdded}`)
       ).toHaveTextContent('-');
+
+      // When added, should be removed from monsters table
+      expect(
+        screen.queryByTestId(`monster-name-${index + 1 - monstersAdded}`)
+      ).not.toHaveTextContent(monster.name);
     }
+  });
+
+  foundMonsters = foundMonsters.filter((monster) => !enemies.includes(monster));
+
+  let enemiesRemoved = 0;
+  enemies.forEach((enemy, index) => {
+    clickRemoveMonster(index + 1 - enemiesRemoved);
+    enemiesRemoved++;
+    expect(
+      screen.queryByTestId(`enemy-name-${index + 1 - enemiesRemoved}`)
+    ).not.toBeInTheDocument();
+
+    foundMonsters = [...foundMonsters, enemy].sort((a, b) =>
+      a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+    );
+    const monsterIndex = foundMonsters.indexOf(enemy) + 1;
+    expect(
+      screen.getByTestId(`monster-name-${monsterIndex}`)
+    ).toHaveTextContent(enemy.name);
   });
 });

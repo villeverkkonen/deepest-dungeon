@@ -18,3 +18,10 @@
 .hoverable:hover {
   cursor: pointer;
 }
+
+@media only screen and (max-width: 600px) {
+  #monsters-table,
+  #enemies-table {
+    width: 75%;
+  }
+}
