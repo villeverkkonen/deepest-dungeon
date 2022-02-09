@@ -86,10 +86,11 @@ function sortAndVerifyTableByHeader(sortBy: string, sortOrder: string) {
   }
 
   foundMonsters.forEach((monster, index) => {
-    expect(screen.getByTestId(`monster-name-${index + 1}`)).toHaveTextContent(
+    const monsterId = index + 1;
+    expect(screen.getByTestId(`monster-name-${monsterId}`)).toHaveTextContent(
       monster.name
     );
-    expect(screen.getByTestId(`monster-cr-${index + 1}`)).toHaveTextContent(
+    expect(screen.getByTestId(`monster-cr-${monsterId}`)).toHaveTextContent(
       challengeRatingConverted(monster.challenge_rating)
     );
   });
@@ -177,14 +178,15 @@ test('should show monsters with name, cr and button on table by search input', (
   expect(monstersTableHeaderCr()).toHaveTextContent('CR');
 
   foundMonsters.forEach((monster, index) => {
-    expect(screen.getByTestId(`monster-name-${index + 1}`)).toHaveTextContent(
+    const monsterId = index + 1;
+    expect(screen.getByTestId(`monster-name-${monsterId}`)).toHaveTextContent(
       monster.name
     );
-    expect(screen.getByTestId(`monster-cr-${index + 1}`)).toHaveTextContent(
+    expect(screen.getByTestId(`monster-cr-${monsterId}`)).toHaveTextContent(
       challengeRatingConverted(monster.challenge_rating)
     );
     expect(
-      screen.getByTestId(`monster-add-btn-${index + 1}`)
+      screen.getByTestId(`monster-add-btn-${monsterId}`)
     ).toHaveTextContent('+');
   });
 });
@@ -204,12 +206,15 @@ test('should be able to add monsters as enemy and remove them', () => {
   const inputValue = 'test';
   let foundMonsters = sortedTestMonstersWithInput(inputValue);
   searchMonsters(inputValue);
+
   let monstersAdded = 0;
   let enemies: ReadonlyArray<Monster> = [];
   foundMonsters.forEach((monster, index) => {
+    const indexPlusOne = index + 1;
     // Add every second monster
-    if ((index + 1) % 2 === 0) {
-      clickAddMonster(index + 1 - monstersAdded);
+    if (indexPlusOne % 2 === 0) {
+      const monsterId = indexPlusOne - monstersAdded;
+      clickAddMonster(monsterId);
       enemies = [...enemies, monster];
       monstersAdded++;
 
@@ -227,29 +232,42 @@ test('should be able to add monsters as enemy and remove them', () => {
       ).toHaveTextContent('-');
 
       // When added, should be removed from monsters table
-      expect(
-        screen.queryByTestId(`monster-name-${index + 1 - monstersAdded}`)
-      ).not.toHaveTextContent(monster.name);
+      const lastMonsterId = foundMonsters.length - monstersAdded;
+      if (monsterId < lastMonsterId) {
+        expect(
+          screen.getByTestId(`monster-name-${monsterId}`)
+        ).not.toHaveTextContent(monster.name);
+      } else {
+        expect(
+          screen.getByTestId(`monster-name-${lastMonsterId}`)
+        ).not.toHaveTextContent(monster.name);
+      }
     }
   });
 
+  // Remove added enemies from monsters table
   foundMonsters = foundMonsters.filter((monster) => !enemies.includes(monster));
 
   let enemiesRemoved = 0;
   enemies.forEach((enemy, index) => {
-    clickRemoveMonster(index + 1 - enemiesRemoved);
+    const enemyId = index + 1 - enemiesRemoved;
+    clickRemoveMonster(enemyId);
     enemiesRemoved++;
-    expect(
-      screen.queryByTestId(`enemy-name-${index + 1 - enemiesRemoved}`)
-    ).not.toBeInTheDocument();
-    if (monstersAdded - enemiesRemoved === 0) {
+    const enemiesCount = monstersAdded - enemiesRemoved;
+
+    // When removed last one whole enemies table should disappear
+    if (enemiesCount === 0) {
       expect(screen.queryByText('Enemies:')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('enemies-table')).not.toBeInTheDocument();
     } else {
+      expect(screen.getByText(`Enemies: ${enemiesCount}`)).toBeInTheDocument();
       expect(
-        screen.getByText(`Enemies: ${monstersAdded - enemiesRemoved}`)
-      ).toBeInTheDocument();
+        screen.queryByTestId(`enemy-name-${enemyId}`)
+      ).not.toHaveTextContent(enemy.name);
     }
 
+    // Removed monster from enemy table should appear back
+    // to monsters table
     foundMonsters = [...foundMonsters, enemy].sort((a, b) =>
       a.name > b.name ? 1 : b.name > a.name ? -1 : 0
     );
