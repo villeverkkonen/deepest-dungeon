@@ -15,6 +15,27 @@
   border: 1px solid #1d1d1d;
 }
 
+.enemy-table-add-btn,
+.enemy-table-remove-btn {
+  list-style-type: none;
+  width: auto;
+  height: auto;
+}
+
+.add-btn {
+  background-color: #00573f;
+  color: white;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.remove-btn {
+  background-color: #b50717;
+  color: white;
+  display: table-cell;
+  vertical-align: middle;
+}
+
 .hoverable:hover {
   cursor: pointer;
 }

@@ -25,14 +25,12 @@ const sortMonsters = (
       return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
     }
     if (
-      a[sortConfig.key as keyof Monster] <
-      b[sortConfig.key as keyof Monster]
+      a[sortConfig.key as keyof Monster] < b[sortConfig.key as keyof Monster]
     ) {
       return sortConfig.direction === 'asc' ? -1 : 1;
     }
     if (
-      a[sortConfig.key as keyof Monster] >
-      b[sortConfig.key as keyof Monster]
+      a[sortConfig.key as keyof Monster] > b[sortConfig.key as keyof Monster]
     ) {
       return sortConfig.direction === 'asc' ? 1 : -1;
     }
@@ -101,13 +99,15 @@ export default function MonstersTable({
                         {challengeRatingConverted(monster.challenge_rating)}
                       </td>
                       <td>
-                        <button
-                          data-testid={`monster-add-btn-${index + 1}`}
-                          className="hoverable"
-                          onClick={() => addMonster(monster)}
-                        >
-                          +
-                        </button>
+                        <div>
+                          <button
+                            data-testid={`monster-add-btn-${index + 1}`}
+                            className="hoverable add-btn"
+                            onClick={() => addMonster(monster)}
+                          >
+                            +
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );

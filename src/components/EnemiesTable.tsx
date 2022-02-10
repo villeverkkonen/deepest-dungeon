@@ -44,20 +44,26 @@ export default function EnemiesTable({
                 </td>
                 <td data-testid={`enemy-qty-${index + 1}`}>{enemy.quantity}</td>
                 <td>
-                  <button
-                    data-testid={`enemy-add-btn-${index + 1}`}
-                    className="hoverable"
-                    onClick={() => addEnemy(enemy)}
-                  >
-                    +
-                  </button>
-                  <button
-                    data-testid={`enemy-remove-btn-${index + 1}`}
-                    className="hoverable"
-                    onClick={() => removeEnemy(enemy)}
-                  >
-                    -
-                  </button>
+                  <div className="enemy-table-buttons">
+                    <div className="enemy-table-add-btn">
+                      <button
+                        data-testid={`enemy-add-btn-${index + 1}`}
+                        className="hoverable add-btn"
+                        onClick={() => addEnemy(enemy)}
+                      >
+                        +
+                      </button>
+                    </div>
+                    <div className="enemy-table-remove-btn">
+                      <button
+                        data-testid={`enemy-remove-btn-${index + 1}`}
+                        className="hoverable remove-btn"
+                        onClick={() => removeEnemy(enemy)}
+                      >
+                        -
+                      </button>
+                    </div>
+                  </div>
                 </td>
               </tr>
             );
