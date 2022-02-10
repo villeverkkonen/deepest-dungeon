@@ -7,7 +7,7 @@ import '../styles/Monsters.css';
 interface MonstersTableProps {
   monsters: ReadonlyArray<Monster>;
   monsterInput: string;
-  addEnemy: (monster: Monster) => void;
+  addMonster: (monster: Monster) => void;
 }
 
 interface SortConfig {
@@ -44,7 +44,7 @@ const sortMonsters = (
 export default function MonstersTable({
   monsters,
   monsterInput,
-  addEnemy,
+  addMonster,
 }: MonstersTableProps) {
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
 
@@ -104,7 +104,7 @@ export default function MonstersTable({
                         <button
                           data-testid={`monster-add-btn-${index + 1}`}
                           className="hoverable"
-                          onClick={() => addEnemy(monster)}
+                          onClick={() => addMonster(monster)}
                         >
                           +
                         </button>

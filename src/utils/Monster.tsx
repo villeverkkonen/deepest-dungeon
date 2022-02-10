@@ -1,6 +1,7 @@
 export interface Monster {
   readonly name: string;
   readonly challenge_rating: string;
+  readonly quantity: number;
 }
 
 export function challengeRatingConverted(cr: string) {

@@ -43,20 +43,44 @@ function App() {
     }
   };
 
-  const addEnemy = (enemy: Monster) => {
+  function updateEnemyQuantityByOne(enemy: Monster, value: number): Monster {
+    const enemiesList = [...enemies];
+    let updatedEnemy: Monster = enemies.filter(
+      (en) => en.name === enemy.name
+    )[0];
+    const enemyIndex = enemiesList.indexOf(updatedEnemy);
+    updatedEnemy = { ...updatedEnemy, quantity: updatedEnemy.quantity + value };
+    console.log(`qty: ${updatedEnemy.quantity}`);
+    enemiesList[enemyIndex] = updatedEnemy;
+    setEnemies(enemiesList);
+
+    return updatedEnemy;
+  }
+
+  const addMonster = (monster: Monster) => {
+    monster = { ...monster, quantity: monster.quantity + 1 };
     setFilteredMonsters(
-      filteredMonsters.filter((monster) => monster.name !== enemy.name)
+      filteredMonsters.filter((mon) => mon.name !== monster.name)
     );
-    setEnemies([...enemies, enemy]);
+    setEnemies([...enemies, monster]);
+  };
+
+  const addEnemy = (enemy: Monster) => {
+    updateEnemyQuantityByOne(enemy, 1);
   };
 
   const removeEnemy = (enemy: Monster) => {
-    // Add removed enemy back to monsters table
-    // if it still matches the search input
-    if (enemy.name.toLowerCase().includes(monsterInput.toLowerCase())) {
-      setFilteredMonsters([...filteredMonsters, enemy]);
+    const updatedEnemy = updateEnemyQuantityByOne(enemy, -1);
+    if (updatedEnemy.quantity === 0) {
+      // Add removed enemy back to monsters table
+      // if it still matches the search input
+      if (
+        updatedEnemy.name.toLowerCase().includes(monsterInput.toLowerCase())
+      ) {
+        setFilteredMonsters([...filteredMonsters, updatedEnemy]);
+      }
+      setEnemies(enemies.filter((en) => en.name !== updatedEnemy.name));
     }
-    setEnemies(enemies.filter((monster) => monster.name !== enemy.name));
   };
 
   useEffect(() => {
@@ -93,11 +117,15 @@ function App() {
                 monsterInputChanged={monsterInputChanged}
               />
             </div>
-            <EnemiesTable enemies={enemies} removeEnemy={removeEnemy} />
+            <EnemiesTable
+              enemies={enemies}
+              addEnemy={addEnemy}
+              removeEnemy={removeEnemy}
+            />
             <MonstersTable
               monsters={filteredMonsters}
               monsterInput={monsterInput}
-              addEnemy={addEnemy}
+              addMonster={addMonster}
             />
           </Card.Body>
         )}

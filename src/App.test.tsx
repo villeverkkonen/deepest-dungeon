@@ -48,7 +48,11 @@ function clickAddMonster(index: number) {
   fireEvent.click(screen.getByTestId(`monster-add-btn-${index}`));
 }
 
-function clickRemoveMonster(index: number) {
+function clickAddEnemy(index: number) {
+  fireEvent.click(screen.getByTestId(`enemy-add-btn-${index}`));
+}
+
+function clickRemoveEnemy(index: number) {
   fireEvent.click(screen.getByTestId(`enemy-remove-btn-${index}`));
 }
 
@@ -228,6 +232,9 @@ test('should be able to add monsters as enemy and remove them', () => {
         challengeRatingConverted(monster.challenge_rating)
       );
       expect(
+        screen.getByTestId(`enemy-qty-${monstersAdded}`)
+      ).toHaveTextContent('1');
+      expect(
         screen.getByTestId(`enemy-remove-btn-${monstersAdded}`)
       ).toHaveTextContent('-');
 
@@ -251,7 +258,7 @@ test('should be able to add monsters as enemy and remove them', () => {
   let enemiesRemoved = 0;
   enemies.forEach((enemy, index) => {
     const enemyId = index + 1 - enemiesRemoved;
-    clickRemoveMonster(enemyId);
+    clickRemoveEnemy(enemyId);
     enemiesRemoved++;
     const enemiesCount = monstersAdded - enemiesRemoved;
 
@@ -283,7 +290,7 @@ test('removed enemy from enemies table goes back to monsters table if search inp
   const secondInput = 'monster';
   searchMonsters(secondInput);
   const foundMonsters = sortedTestMonstersWithInput(secondInput);
-  clickRemoveMonster(1);
+  clickRemoveEnemy(1);
 
   // Monsters table should have only monsters by second search input
   foundMonsters.forEach((monster, index) => {
@@ -296,4 +303,36 @@ test('removed enemy from enemies table goes back to monsters table if search inp
   expect(
     screen.queryByTestId(`monster-name-${foundMonsters.length + 1}`)
   ).not.toBeInTheDocument();
+});
+
+test('should be able to add more than one of the same monster', () => {
+  searchMonsters('test dragon');
+  clickAddMonster(1);
+  expect(screen.getByTestId('enemy-qty-1')).toHaveTextContent('1');
+
+  clickAddEnemy(1);
+  expect(screen.getByTestId('enemy-qty-1')).toHaveTextContent('2');
+
+  for (let i = 0; i < 3; i++) {
+    clickAddEnemy(1);
+  }
+  expect(screen.getByTestId('enemy-qty-1')).toHaveTextContent('5');
+});
+
+test('remove enemy from table when quantity goes to zero', () => {
+  searchMonsters('test dragon');
+  clickAddMonster(1);
+  for (let i = 0; i < 3; i++) {
+    clickAddEnemy(1);
+  }
+  expect(screen.getByTestId('enemy-qty-1')).toHaveTextContent('4');
+
+  clickRemoveEnemy(1);
+  expect(screen.getByTestId('enemy-qty-1')).toHaveTextContent('3');
+  clickRemoveEnemy(1);
+  expect(screen.getByTestId('enemy-qty-1')).toHaveTextContent('2');
+  clickRemoveEnemy(1);
+  expect(screen.getByTestId('enemy-qty-1')).toHaveTextContent('1');
+  clickRemoveEnemy(1);
+  expect(screen.queryByTestId('enemy-qty-1')).not.toBeInTheDocument();
 });

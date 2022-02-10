@@ -6,11 +6,13 @@ import '../styles/Monsters.css';
 
 interface EnemiesTableProps {
   enemies: ReadonlyArray<Monster>;
+  addEnemy: (enemy: Monster) => void;
   removeEnemy: (enemy: Monster) => void;
 }
 
 export default function EnemiesTable({
   enemies,
+  addEnemy,
   removeEnemy,
 }: EnemiesTableProps) {
   if (enemies.length === 0) {
@@ -23,12 +25,9 @@ export default function EnemiesTable({
       <Table id="enemies-table" data-testid="enemies-table">
         <thead>
           <tr>
-            <th data-testid="enemies-table-header-name" className="hoverable">
-              Name
-            </th>
-            <th data-testid="enemies-table-header-cr" className="hoverable">
-              CR
-            </th>
+            <th data-testid="enemies-table-header-name">Name</th>
+            <th data-testid="enemies-table-header-cr">CR</th>
+            <th data-testid="enemies-table-header-qty">Qty</th>
             <th />
           </tr>
         </thead>
@@ -43,7 +42,15 @@ export default function EnemiesTable({
                 <td data-testid={`enemy-cr-${index + 1}`}>
                   {challengeRatingConverted(enemy.challenge_rating)}
                 </td>
+                <td data-testid={`enemy-qty-${index + 1}`}>{enemy.quantity}</td>
                 <td>
+                  <button
+                    data-testid={`enemy-add-btn-${index + 1}`}
+                    className="hoverable"
+                    onClick={() => addEnemy(enemy)}
+                  >
+                    +
+                  </button>
                   <button
                     data-testid={`enemy-remove-btn-${index + 1}`}
                     className="hoverable"
