@@ -50,7 +50,6 @@ function App() {
     )[0];
     const enemyIndex = enemiesList.indexOf(updatedEnemy);
     updatedEnemy = { ...updatedEnemy, quantity: updatedEnemy.quantity + value };
-    console.log(`qty: ${updatedEnemy.quantity}`);
     enemiesList[enemyIndex] = updatedEnemy;
     setEnemies(enemiesList);
 
