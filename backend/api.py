@@ -2,15 +2,15 @@ from flask import Flask
 import requests
 from constants import BASE_URL
 
-app = Flask(__name__, static_folder='../build', static_url_path='/')
+deepest_dungeon = Flask(__name__, static_folder='../build', static_url_path='/')
 
 
-@app.route('/')
+@deepest_dungeon.route('/')
 def index():
-    return app.send_static_file('index.html')
+    return deepest_dungeon.send_static_file('index.html')
 
 
-@app.route('/api/monsters')
+@deepest_dungeon.route('/api/monsters')
 def get_monsters():
     response = requests.get(BASE_URL + '/monsters?limit=2000')
     if response.ok:
@@ -31,4 +31,4 @@ def get_monsters():
 
 
 if __name__ == '__main__':
-    app.run()
+    deepest_dungeon.run()
