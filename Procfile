@@ -1,1 +1,1 @@
-web: gunicorn backend/api:deepest_dungeon
+web: gunicorn backend.api:deepest_dungeon
