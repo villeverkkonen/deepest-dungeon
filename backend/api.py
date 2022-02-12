@@ -1,6 +1,6 @@
 from flask import Flask
 import requests
-from constants import BASE_URL
+from backend.constants import BASE_URL
 
 deepest_dungeon = Flask(
     __name__, static_folder='../build', static_url_path='/')
