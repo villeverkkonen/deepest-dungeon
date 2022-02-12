@@ -26,7 +26,7 @@ export default function PlayerCountInput({
         onChange={playerCountInputChanged}
         id="player-count-input"
         data-testid="player-count-input"
-        className="input-field"
+        className="input-field dropdown-input"
       >
         {playerCountOptions.map((option) => {
           return (

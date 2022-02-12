@@ -24,3 +24,7 @@
 .dropdown-inputs {
   display: inline-flex;
 }
+
+.dropdown-input {
+  width: 40px;
+}

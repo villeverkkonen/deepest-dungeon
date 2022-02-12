@@ -26,7 +26,7 @@ export default function PlayerLevelInput({
         onChange={playerLevelInputChanged}
         id="player-level-input"
         data-testid="player-level-input"
-        className="input-field"
+        className="input-field dropdown-input"
       >
         {playerLevelOptions.map((option) => {
           return (
