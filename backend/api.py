@@ -2,7 +2,8 @@ from flask import Flask
 import requests
 from constants import BASE_URL
 
-deepest_dungeon = Flask(__name__, static_folder='../build', static_url_path='/')
+deepest_dungeon = Flask(
+    __name__, static_folder='../build', static_url_path='/')
 
 
 @deepest_dungeon.route('/')
@@ -31,4 +32,5 @@ def get_monsters():
 
 
 if __name__ == '__main__':
-    deepest_dungeon.run()
+    deepest_dungeon.run(host='0.0.0.0', debug=False,
+                        port=os.environ.get('PORT', 80))
