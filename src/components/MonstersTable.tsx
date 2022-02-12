@@ -99,15 +99,13 @@ export default function MonstersTable({
                         {challengeRatingConverted(monster.challenge_rating)}
                       </td>
                       <td>
-                        <div>
-                          <button
-                            data-testid={`monster-add-btn-${index + 1}`}
-                            className="hoverable add-btn"
-                            onClick={() => addMonster(monster)}
-                          >
-                            +
-                          </button>
-                        </div>
+                        <button
+                          data-testid={`monster-add-btn-${index + 1}`}
+                          className="hoverable add-btn"
+                          onClick={() => addMonster(monster)}
+                        >
+                          +
+                        </button>
                       </td>
                     </tr>
                   );
