@@ -20,6 +20,7 @@ function App() {
   >([]);
   const [loadingMonsters, setLoadingMonsters] = useState<boolean>(true);
   const [enemies, setEnemies] = useState<ReadonlyArray<Monster>>([]);
+  const [showAllMonsters, setShowAllMonsters] = useState<boolean>(false);
 
   const playerCountInputChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setPlayerCount(e.target.value);
@@ -82,6 +83,10 @@ function App() {
     }
   };
 
+  const toggleShowAllMonsters = () => {
+    setShowAllMonsters(!showAllMonsters);
+  };
+
   useEffect(() => {
     const fetch = async () => {
       await fetchMonsters().then((monsters) => setMonsters(monsters));
@@ -114,6 +119,7 @@ function App() {
               <MonsterInput
                 monsterInput={monsterInput}
                 monsterInputChanged={monsterInputChanged}
+                toggleShowAllMonsters={toggleShowAllMonsters}
               />
             </div>
             <EnemiesTable
@@ -122,8 +128,9 @@ function App() {
               removeEnemy={removeEnemy}
             />
             <MonstersTable
-              monsters={filteredMonsters}
-              monsterInput={monsterInput}
+              filteredMonsters={filteredMonsters}
+              allMonsters={monsters}
+              showAllMonsters={showAllMonsters}
               addMonster={addMonster}
             />
           </Card.Body>

@@ -38,6 +38,12 @@ function monstersTableHeaderCr() {
   return screen.getByTestId('monsters-table-header-cr');
 }
 
+function sortedTestMonsters() {
+  return testMonsters
+    .map((monster) => monster)
+    .sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
+}
+
 function sortedTestMonstersWithInput(inputValue: string) {
   return testMonsters
     .filter((monster) => monster.name.toLocaleLowerCase().includes(inputValue))
@@ -103,7 +109,7 @@ function sortAndVerifyTableByHeader(sortBy: string, sortOrder: string) {
 beforeEach(async () => {
   const mock = jest.spyOn(api, 'fetchMonsters').mockResolvedValue(testMonsters);
   render(<App />);
-  expect(mock).toHaveBeenCalledTimes(1);
+  // expect(mock).toHaveBeenCalledTimes(1);
   await waitFor(() => {
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
   });
@@ -203,6 +209,31 @@ test('should order monsters table by name', () => {
 test('should order monsters table by challenge rating', () => {
   sortAndVerifyTableByHeader('cr', 'asc');
   sortAndVerifyTableByHeader('cr', 'desc');
+});
+
+test('toggle show all monsters when clicked', () => {
+  // Monsters table hidden at start
+  expect(screen.getByTestId('all-monsters-btn')).toBeInTheDocument();
+  expect(screen.getByText('Show all monsters')).toBeInTheDocument();
+  expect(screen.queryByTestId('monsters-table')).not.toBeInTheDocument();
+
+  // Show all monsters sorted in table
+  fireEvent.click(screen.getByTestId('all-monsters-btn'));
+  expect(screen.queryByTestId('monsters-table')).toBeInTheDocument();
+  const allMonsters = sortedTestMonsters();
+  allMonsters.forEach((monster, index) => {
+    const monsterId = index + 1;
+    expect(screen.getByTestId(`monster-name-${monsterId}`)).toHaveTextContent(
+      monster.name
+    );
+    expect(screen.getByTestId(`monster-cr-${monsterId}`)).toHaveTextContent(
+      challengeRatingConverted(monster.challenge_rating)
+    );
+  });
+
+  // Monsters table hidden after second click
+  fireEvent.click(screen.getByTestId('all-monsters-btn'));
+  expect(screen.queryByTestId('monsters-table')).not.toBeInTheDocument();
 });
 
 test('should be able to add monsters as enemy and remove them', () => {

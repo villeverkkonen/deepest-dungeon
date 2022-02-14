@@ -5,8 +5,9 @@ import { challengeRatingConverted, Monster } from '../utils/Monster';
 import '../styles/Monsters.css';
 
 interface MonstersTableProps {
-  monsters: ReadonlyArray<Monster>;
-  monsterInput: string;
+  filteredMonsters: ReadonlyArray<Monster>;
+  allMonsters: ReadonlyArray<Monster>;
+  showAllMonsters: boolean;
   addMonster: (monster: Monster) => void;
 }
 
@@ -16,10 +17,10 @@ interface SortConfig {
 }
 
 const sortMonsters = (
-  monsters: ReadonlyArray<Monster>,
+  filteredMonsters: ReadonlyArray<Monster>,
   sortConfig: SortConfig | null
 ) => {
-  let sortedMonsters: Monster[] = [...monsters];
+  let sortedMonsters: Monster[] = [...filteredMonsters];
   sortedMonsters.sort((a: Monster, b: Monster) => {
     if (sortConfig === null) {
       return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
@@ -40,13 +41,22 @@ const sortMonsters = (
 };
 
 export default function MonstersTable({
-  monsters,
-  monsterInput,
+  filteredMonsters,
+  allMonsters,
+  showAllMonsters,
   addMonster,
 }: MonstersTableProps) {
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
 
-  const sortedMonsters = sortMonsters(monsters, sortConfig);
+  // Show all monsters or filtered by search
+  const sortedMonsters = sortMonsters(
+    filteredMonsters.length > 0
+      ? filteredMonsters
+      : showAllMonsters
+      ? allMonsters
+      : [],
+    sortConfig
+  );
 
   const requestSort = (key: string) => {
     let direction = 'asc';
@@ -58,63 +68,61 @@ export default function MonstersTable({
 
   return (
     <>
-      {monsterInput.length > 1 ? (
-        monsters.length === 0 ? (
-          <span>No monsters found</span>
-        ) : (
-          <>
-            <span>Found monsters: {monsters.length}</span>
+      {sortedMonsters.length === 0 ? (
+        <span>No monsters found</span>
+      ) : (
+        <>
+          <span>Found monsters: {sortedMonsters.length}</span>
 
-            <Table id="monsters-table" data-testid="monsters-table">
-              <thead>
-                <tr>
-                  <th
-                    data-testid="monsters-table-header-name"
-                    className="hoverable"
-                    onClick={() => requestSort('name')}
+          <Table id="monsters-table" data-testid="monsters-table">
+            <thead>
+              <tr>
+                <th
+                  data-testid="monsters-table-header-name"
+                  className="hoverable"
+                  onClick={() => requestSort('name')}
+                >
+                  Name
+                </th>
+                <th
+                  data-testid="monsters-table-header-cr"
+                  className="hoverable"
+                  onClick={() => requestSort('challenge_rating')}
+                >
+                  CR
+                </th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {sortedMonsters.map((monster, index) => {
+                return (
+                  <tr
+                    key={`monster-${index + 1}`}
+                    data-testid="monsters-table-body-row"
                   >
-                    Name
-                  </th>
-                  <th
-                    data-testid="monsters-table-header-cr"
-                    className="hoverable"
-                    onClick={() => requestSort('challenge_rating')}
-                  >
-                    CR
-                  </th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {sortedMonsters.map((monster, index) => {
-                  return (
-                    <tr
-                      key={`monster-${index + 1}`}
-                      data-testid="monsters-table-body-row"
-                    >
-                      <td data-testid={`monster-name-${index + 1}`}>
-                        {monster.name}
-                      </td>
-                      <td data-testid={`monster-cr-${index + 1}`}>
-                        {challengeRatingConverted(monster.challenge_rating)}
-                      </td>
-                      <td>
-                        <button
-                          data-testid={`monster-add-btn-${index + 1}`}
-                          className="hoverable add-btn"
-                          onClick={() => addMonster(monster)}
-                        >
-                          +
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-          </>
-        )
-      ) : null}
+                    <td data-testid={`monster-name-${index + 1}`}>
+                      {monster.name}
+                    </td>
+                    <td data-testid={`monster-cr-${index + 1}`}>
+                      {challengeRatingConverted(monster.challenge_rating)}
+                    </td>
+                    <td>
+                      <button
+                        data-testid={`monster-add-btn-${index + 1}`}
+                        className="hoverable add-btn"
+                        onClick={() => addMonster(monster)}
+                      >
+                        +
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </>
+      )}
     </>
   );
 }
