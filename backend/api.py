@@ -1,6 +1,5 @@
 from flask import Flask
 import requests
-from backend.constants import BASE_URL
 
 deepest_dungeon = Flask(
     __name__, static_folder='../build', static_url_path='/')
@@ -13,7 +12,7 @@ def index():
 
 @deepest_dungeon.route('/api/monsters')
 def get_monsters():
-    response = requests.get(BASE_URL + '/monsters?limit=2000')
+    response = requests.get('https://api.open5e.com/monsters?limit=2000')
     if response.ok:
         filteredMonsters = {'results': []}
 
@@ -32,5 +31,4 @@ def get_monsters():
 
 
 if __name__ == '__main__':
-    deepest_dungeon.run(host='0.0.0.0', debug=False,
-                        port=os.environ.get('PORT', 80))
+    deepest_dungeon.run()
