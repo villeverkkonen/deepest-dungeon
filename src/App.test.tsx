@@ -109,7 +109,7 @@ function sortAndVerifyTableByHeader(sortBy: string, sortOrder: string) {
 beforeEach(async () => {
   const mock = jest.spyOn(api, 'fetchMonsters').mockResolvedValue(testMonsters);
   render(<App />);
-  // expect(mock).toHaveBeenCalledTimes(1);
+  expect(mock).toHaveBeenCalledTimes(1);
   await waitFor(() => {
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
   });
