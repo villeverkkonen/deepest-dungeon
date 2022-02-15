@@ -8,6 +8,7 @@ interface MonstersTableProps {
   filteredMonsters: ReadonlyArray<Monster>;
   allMonsters: ReadonlyArray<Monster>;
   showAllMonsters: boolean;
+  monsterInput: string;
   addMonster: (monster: Monster) => void;
 }
 
@@ -44,6 +45,7 @@ export default function MonstersTable({
   filteredMonsters,
   allMonsters,
   showAllMonsters,
+  monsterInput,
   addMonster,
 }: MonstersTableProps) {
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
@@ -69,7 +71,9 @@ export default function MonstersTable({
   return (
     <>
       {sortedMonsters.length === 0 ? (
-        <span>No monsters found</span>
+        monsterInput.length > 1 ? (
+          <span>No monsters found</span>
+        ) : null
       ) : (
         <>
           <span>Found monsters: {sortedMonsters.length}</span>

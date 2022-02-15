@@ -131,6 +131,7 @@ function App() {
               filteredMonsters={filteredMonsters}
               allMonsters={monsters}
               showAllMonsters={showAllMonsters}
+              monsterInput={monsterInput}
               addMonster={addMonster}
             />
           </Card.Body>
