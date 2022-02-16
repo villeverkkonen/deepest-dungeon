@@ -22,8 +22,9 @@ def get_monsters():
                 challengeRating = '0.25'
             if monster['challenge_rating'] == '1/2':
                 challengeRating = '0.5'
+
             filteredMonsters['results'].append(
-                {'name': monster['name'], 'challenge_rating': challengeRating, 'quantity': 0})
+                {'name': monster['name'], 'type': monster['type'].capitalize(), 'challenge_rating': challengeRating, 'quantity': 0})
 
         return filteredMonsters
     else:

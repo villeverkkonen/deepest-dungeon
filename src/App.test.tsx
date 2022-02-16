@@ -34,6 +34,10 @@ function monstersTableHeaderName() {
   return screen.getByTestId('monsters-table-header-name');
 }
 
+function monstersTableHeaderType() {
+  return screen.getByTestId('monsters-table-header-type');
+}
+
 function monstersTableHeaderCr() {
   return screen.getByTestId('monsters-table-header-cr');
 }
@@ -175,7 +179,7 @@ test('show monsters when monsters input length is two or more', () => {
   expect(screen.getByText('Found monsters: 1')).toBeInTheDocument();
 });
 
-test('should show monsters with name, cr and button on table by search input', () => {
+test('should show monsters with name, type, cr and button on table by search input', () => {
   const inputValue = 'test';
   const foundMonsters = sortedTestMonstersWithInput(inputValue);
 
@@ -185,12 +189,16 @@ test('should show monsters with name, cr and button on table by search input', (
     screen.getByText(`Found monsters: ${foundMonsters.length}`)
   ).toBeInTheDocument();
   expect(monstersTableHeaderName()).toHaveTextContent('Name');
+  expect(monstersTableHeaderType()).toHaveTextContent('Type');
   expect(monstersTableHeaderCr()).toHaveTextContent('CR');
 
   foundMonsters.forEach((monster, index) => {
     const monsterId = index + 1;
     expect(screen.getByTestId(`monster-name-${monsterId}`)).toHaveTextContent(
       monster.name
+    );
+    expect(screen.getByTestId(`monster-type-${monsterId}`)).toHaveTextContent(
+      monster.type
     );
     expect(screen.getByTestId(`monster-cr-${monsterId}`)).toHaveTextContent(
       challengeRatingConverted(monster.challenge_rating)
@@ -204,6 +212,11 @@ test('should show monsters with name, cr and button on table by search input', (
 test('should order monsters table by name', () => {
   sortAndVerifyTableByHeader('name', 'asc');
   sortAndVerifyTableByHeader('name', 'desc');
+});
+
+test('should order monsters table by type', () => {
+  sortAndVerifyTableByHeader('type', 'asc');
+  sortAndVerifyTableByHeader('type', 'desc');
 });
 
 test('should order monsters table by challenge rating', () => {
@@ -259,6 +272,9 @@ test('should be able to add monsters as enemy and remove them', () => {
       expect(
         screen.getByTestId(`enemy-name-${monstersAdded}`)
       ).toHaveTextContent(monster.name);
+      expect(
+        screen.getByTestId(`enemy-type-${monstersAdded}`)
+      ).toHaveTextContent(monster.type);
       expect(screen.getByTestId(`enemy-cr-${monstersAdded}`)).toHaveTextContent(
         challengeRatingConverted(monster.challenge_rating)
       );

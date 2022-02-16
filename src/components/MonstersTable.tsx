@@ -89,6 +89,13 @@ export default function MonstersTable({
                   Name
                 </th>
                 <th
+                  data-testid="monsters-table-header-type"
+                  className="hoverable"
+                  onClick={() => requestSort('type')}
+                >
+                  Type
+                </th>
+                <th
                   data-testid="monsters-table-header-cr"
                   className="hoverable"
                   onClick={() => requestSort('challenge_rating')}
@@ -107,6 +114,9 @@ export default function MonstersTable({
                   >
                     <td data-testid={`monster-name-${index + 1}`}>
                       {monster.name}
+                    </td>
+                    <td data-testid={`monster-type-${index + 1}`}>
+                      {monster.type}
                     </td>
                     <td data-testid={`monster-cr-${index + 1}`}>
                       {challengeRatingConverted(monster.challenge_rating)}

@@ -26,6 +26,7 @@ export default function EnemiesTable({
         <thead>
           <tr>
             <th data-testid="enemies-table-header-name">Name</th>
+            <th data-testid="enemies-table-header-type">Type</th>
             <th data-testid="enemies-table-header-cr">CR</th>
             <th data-testid="enemies-table-header-qty">Qty</th>
             <th />
@@ -39,6 +40,7 @@ export default function EnemiesTable({
                 data-testid="enemies-table-body-row"
               >
                 <td data-testid={`enemy-name-${index + 1}`}>{enemy.name}</td>
+                <td data-testid={`enemy-type-${index + 1}`}>{enemy.type}</td>
                 <td data-testid={`enemy-cr-${index + 1}`}>
                   {challengeRatingConverted(enemy.challenge_rating)}
                 </td>
