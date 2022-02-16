@@ -31,8 +31,14 @@ function App() {
   };
 
   const monsterInputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Toggle show all monsters off when typing something to search input
+    if (monsterInput.length === 0 && showAllMonsters) {
+      setShowAllMonsters(false);
+    }
+
     const newMonsterInput = e.target.value;
     setMonsterInput(newMonsterInput);
+    // Filter monsters when searched by two or more characters
     if (newMonsterInput.length > 1) {
       setFilteredMonsters(
         monsters.filter((monster) =>
@@ -75,6 +81,7 @@ function App() {
       // Add removed enemy back to monsters table
       // if it still matches the search input
       if (
+        monsterInput.length > 0 &&
         updatedEnemy.name.toLowerCase().includes(monsterInput.toLowerCase())
       ) {
         setFilteredMonsters([...filteredMonsters, updatedEnemy]);
@@ -85,6 +92,8 @@ function App() {
 
   const toggleShowAllMonsters = () => {
     setShowAllMonsters(!showAllMonsters);
+    setMonsterInput('');
+    setFilteredMonsters([]);
   };
 
   useEffect(() => {
@@ -120,6 +129,7 @@ function App() {
                 monsterInput={monsterInput}
                 monsterInputChanged={monsterInputChanged}
                 toggleShowAllMonsters={toggleShowAllMonsters}
+                showAllMonsters={showAllMonsters}
               />
             </div>
             <EnemiesTable

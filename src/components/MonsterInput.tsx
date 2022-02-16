@@ -7,12 +7,14 @@ interface MonsterInputProps {
   monsterInput: string;
   monsterInputChanged: (e: React.ChangeEvent<HTMLInputElement>) => void;
   toggleShowAllMonsters: () => void;
+  showAllMonsters: boolean;
 }
 
 export default function MonsterInput({
   monsterInput,
   monsterInputChanged,
   toggleShowAllMonsters,
+  showAllMonsters,
 }: MonsterInputProps) {
   return (
     <>
@@ -32,7 +34,8 @@ export default function MonsterInput({
           id="all-monsters-btn"
           data-testid="all-monsters-btn"
           label="Show all monsters"
-          onClick={() => toggleShowAllMonsters()}
+          checked={showAllMonsters}
+          onChange={() => toggleShowAllMonsters()}
         />
       </Form.Group>
     </>
