@@ -16,31 +16,39 @@
   border: 1px solid #1d1d1d;
 }
 
-td {
-  border-radius: 5px;
-}
-
 #monsters-table td:last-child,
 #enemies-table td:last-child {
   border: none;
 }
 
+/* #enemies-table .add-btn {
+  margin-bottom: 2px;
+}
+
+#enemies-table .remove-btn {
+  margin-top: 2px;
+} */
+
+td {
+  border-radius: 5px;
+}
+
 .add-btn {
   background-color: #00573f;
-  color: white;
   vertical-align: text-bottom;
 }
 
 .remove-btn {
   background-color: #b50717;
-  color: white;
   vertical-align: text-top;
 }
 
 .add-btn,
 .remove-btn {
-  width: 25px;
+  width: 30px;
+  height: 25px;
   border-radius: 5px;
+  color: white;
 }
 
 .hoverable:hover {
