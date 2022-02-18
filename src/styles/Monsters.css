@@ -16,6 +16,15 @@
   border: 1px solid #1d1d1d;
 }
 
+td {
+  border-radius: 5px;
+}
+
+#monsters-table td:last-child,
+#enemies-table td:last-child {
+  border: none;
+}
+
 .add-btn {
   background-color: #00573f;
   color: white;
@@ -31,15 +40,16 @@
 .add-btn,
 .remove-btn {
   width: 25px;
+  border-radius: 5px;
 }
 
 .hoverable:hover {
   cursor: pointer;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
   #monsters-table,
   #enemies-table {
-    width: 75%;
+    width: 80%;
   }
 }

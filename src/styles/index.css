@@ -10,12 +10,12 @@ body {
 @font-face {
   font-family: 'Enchanted Land';
   src: local('Enchanted Land'),
-    url('./fonts/enchanted_land.otf') format('truetype');
+    url('../fonts/enchanted_land.otf') format('truetype');
   font-weight: normal;
 }
 
 @font-face {
   font-family: 'Dungeon';
-  src: local('Dungeon'), url('./fonts/DUNGRG__.TTF') format('truetype');
+  src: local('Dungeon'), url('../fonts/DUNGRG__.TTF') format('truetype');
   font-weight: normal;
 }

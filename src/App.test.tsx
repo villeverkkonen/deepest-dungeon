@@ -18,8 +18,12 @@ function monsterInput() {
   return screen.getByTestId('monster-input');
 }
 
-function allMonstersBtn() {
+function showAllMonstersBtn() {
   return screen.getByTestId('all-monsters-btn');
+}
+
+function clickShowAllMonstersBtn() {
+  fireEvent.click(showAllMonstersBtn());
 }
 
 function expectNoMonstersFound() {
@@ -230,12 +234,12 @@ test('should order monsters table by challenge rating', () => {
 
 test('toggle show all monsters when clicked', () => {
   // Monsters table hidden at start
-  expect(allMonstersBtn()).toBeInTheDocument();
+  expect(showAllMonstersBtn()).toBeInTheDocument();
   expect(screen.getByText('Show all monsters')).toBeInTheDocument();
   expect(screen.queryByTestId('monsters-table')).not.toBeInTheDocument();
 
   // Show all monsters sorted in table
-  fireEvent.click(allMonstersBtn());
+  clickShowAllMonstersBtn();
   expect(screen.queryByTestId('monsters-table')).toBeInTheDocument();
   const allMonsters = sortedTestMonsters();
   allMonsters.forEach((monster, index) => {
@@ -249,7 +253,7 @@ test('toggle show all monsters when clicked', () => {
   });
 
   // Monsters table hidden after second click
-  fireEvent.click(allMonstersBtn());
+  clickShowAllMonstersBtn();
   expect(screen.queryByTestId('monsters-table')).not.toBeInTheDocument();
 });
 
@@ -257,7 +261,7 @@ test('should clear search input and show all monsters when clicked', () => {
   const input = monsterInput();
   searchMonsters('dr');
   expect(input).toHaveValue('dr');
-  fireEvent.click(allMonstersBtn());
+  clickShowAllMonstersBtn();
   expect(input).toHaveValue('');
   expect(
     screen.getByTestId(`monster-name-${testMonsters.length}`)
@@ -265,7 +269,7 @@ test('should clear search input and show all monsters when clicked', () => {
 });
 
 test('should toggle show all monsters off when typing in search input', () => {
-  fireEvent.click(allMonstersBtn());
+  clickShowAllMonstersBtn();
   expect(
     screen.getByTestId(`monster-name-${testMonsters.length}`)
   ).toBeInTheDocument();
@@ -409,8 +413,17 @@ test('remove enemy from table when quantity goes to zero', () => {
 });
 
 test('show all monsters, add and remove enemy, should still show all monsters', () => {
-  fireEvent.click(allMonstersBtn());
+  clickShowAllMonstersBtn();
   clickAddMonster(1);
   clickRemoveEnemy(1);
   expect(screen.getByTestId(`monster-name-${testMonsters.length}`));
+});
+
+test('monsters table should not contain enemies when added enemy and searched again', () => {
+  searchMonsters('test dragon');
+  clickAddMonster(1);
+  clickShowAllMonstersBtn();
+  searchMonsters('test dragon');
+  expect(screen.queryByTestId('monsters-table')).not.toBeInTheDocument();
+  expect(screen.queryByTestId('enemies-table')).toBeInTheDocument();
 });

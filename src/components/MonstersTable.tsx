@@ -5,9 +5,7 @@ import { challengeRatingConverted, Monster } from '../utils/Monster';
 import '../styles/Monsters.css';
 
 interface MonstersTableProps {
-  filteredMonsters: ReadonlyArray<Monster>;
-  allMonsters: ReadonlyArray<Monster>;
-  showAllMonsters: boolean;
+  monsters: ReadonlyArray<Monster>;
   monsterInput: string;
   addMonster: (monster: Monster) => void;
 }
@@ -42,23 +40,13 @@ const sortMonsters = (
 };
 
 export default function MonstersTable({
-  filteredMonsters,
-  allMonsters,
-  showAllMonsters,
+  monsters,
   monsterInput,
   addMonster,
 }: MonstersTableProps) {
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
 
-  // Show all monsters or filtered by search
-  const sortedMonsters = sortMonsters(
-    filteredMonsters.length > 0
-      ? filteredMonsters
-      : showAllMonsters
-      ? allMonsters
-      : [],
-    sortConfig
-  );
+  const sortedMonsters = sortMonsters(monsters, sortConfig);
 
   const requestSort = (key: string) => {
     let direction = 'asc';

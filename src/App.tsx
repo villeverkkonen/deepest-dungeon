@@ -8,7 +8,7 @@ import MonsterInput from './components/MonsterInput';
 import MonstersTable from './components/MonstersTable';
 import EnemiesTable from './components/EnemiesTable';
 
-import './App.css';
+import './styles/App.css';
 
 function App() {
   const [playerCount, setPlayerCount] = useState<string>('');
@@ -96,6 +96,17 @@ function App() {
     setFilteredMonsters([]);
   };
 
+  const monstersForTable = () => {
+    // Show all monsters or filtered by search
+    if (filteredMonsters.length > 0) {
+      return filteredMonsters;
+    }
+    if (showAllMonsters) {
+      return monsters;
+    }
+    return [];
+  };
+
   useEffect(() => {
     const fetch = async () => {
       await fetchMonsters().then((monsters) => setMonsters(monsters));
@@ -138,9 +149,7 @@ function App() {
               removeEnemy={removeEnemy}
             />
             <MonstersTable
-              filteredMonsters={filteredMonsters}
-              allMonsters={monsters}
-              showAllMonsters={showAllMonsters}
+              monsters={monstersForTable()}
               monsterInput={monsterInput}
               addMonster={addMonster}
             />
