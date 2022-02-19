@@ -5,6 +5,7 @@ import * as api from './utils/fetchMonsters';
 import { testMonsters } from './utils/testMonsters';
 import { playerCountOptions, playerLevelOptions } from './utils/InputValues';
 import { challengeRatingConverted, Monster } from './utils/Monster';
+import { doesNotMatch } from 'assert';
 
 function playerCountInput() {
   return screen.getByTestId('player-count-input');
@@ -414,16 +415,15 @@ test('remove enemy from table when quantity goes to zero', () => {
 
 test('show all monsters, add and remove enemy, should still show all monsters', () => {
   clickShowAllMonstersBtn();
-  clickAddMonster(1);
+  clickAddMonster(testMonsters.length);
   clickRemoveEnemy(1);
   expect(screen.getByTestId(`monster-name-${testMonsters.length}`));
 });
 
 test('monsters table should not contain enemies when added enemy and searched again', () => {
-  searchMonsters('test dragon');
-  clickAddMonster(1);
   clickShowAllMonstersBtn();
-  searchMonsters('test dragon');
-  expect(screen.queryByTestId('monsters-table')).not.toBeInTheDocument();
-  expect(screen.queryByTestId('enemies-table')).toBeInTheDocument();
+  clickAddMonster(testMonsters.length);
+  expect(
+    screen.queryByTestId(`monster-name-${testMonsters.length}`)
+  ).not.toBeInTheDocument();
 });

@@ -9,12 +9,15 @@ import MonstersTable from './components/MonstersTable';
 import EnemiesTable from './components/EnemiesTable';
 
 import './styles/App.css';
+import { testMonsters } from './utils/testMonsters';
 
 function App() {
   const [playerCount, setPlayerCount] = useState<string>('');
   const [playerLevel, setPlayerLevel] = useState<string>('');
   const [monsterInput, setMonsterInput] = useState<string>('');
-  const [monsters, setMonsters] = useState<ReadonlyArray<Monster>>([]);
+  const [availableMonsters, setAvailableMonsters] = useState<
+    ReadonlyArray<Monster>
+  >([]);
   const [filteredMonsters, setFilteredMonsters] = useState<
     ReadonlyArray<Monster>
   >([]);
@@ -41,7 +44,7 @@ function App() {
     // Filter monsters when searched by two or more characters
     if (newMonsterInput.length > 1) {
       setFilteredMonsters(
-        monsters.filter((monster) =>
+        availableMonsters.filter((monster) =>
           monster.name.toLowerCase().includes(newMonsterInput.toLowerCase())
         )
       );
@@ -56,6 +59,7 @@ function App() {
       (en) => en.name === enemy.name
     )[0];
     const enemyIndex = enemiesList.indexOf(updatedEnemy);
+    // Value can be minus or plus one
     updatedEnemy = { ...updatedEnemy, quantity: updatedEnemy.quantity + value };
     enemiesList[enemyIndex] = updatedEnemy;
     setEnemies(enemiesList);
@@ -65,8 +69,14 @@ function App() {
 
   const addMonster = (monster: Monster) => {
     monster = { ...monster, quantity: monster.quantity + 1 };
-    setFilteredMonsters(
-      filteredMonsters.filter((mon) => mon.name !== monster.name)
+    // Remove monster from monsters table
+    if (filteredMonsters.length > 0) {
+      setFilteredMonsters(
+        filteredMonsters.filter((mon) => mon.name !== monster.name)
+      );
+    }
+    setAvailableMonsters(
+      availableMonsters.filter((mon) => mon.name !== monster.name)
     );
     setEnemies([...enemies, monster]);
   };
@@ -87,6 +97,7 @@ function App() {
         setFilteredMonsters([...filteredMonsters, updatedEnemy]);
       }
       setEnemies(enemies.filter((en) => en.name !== updatedEnemy.name));
+      setAvailableMonsters([...availableMonsters, updatedEnemy]);
     }
   };
 
@@ -97,19 +108,21 @@ function App() {
   };
 
   const monstersForTable = () => {
-    // Show all monsters or filtered by search
+    // Show all available monsters or filtered by search
     if (filteredMonsters.length > 0) {
       return filteredMonsters;
     }
     if (showAllMonsters) {
-      return monsters;
+      return availableMonsters;
     }
     return [];
   };
 
   useEffect(() => {
     const fetch = async () => {
-      await fetchMonsters().then((monsters) => setMonsters(monsters));
+      await fetchMonsters().then((monsters) => {
+        setAvailableMonsters(monsters);
+      });
       setLoadingMonsters(false);
     };
     fetch();

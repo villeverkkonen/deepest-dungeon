@@ -16,10 +16,10 @@ interface SortConfig {
 }
 
 const sortMonsters = (
-  filteredMonsters: ReadonlyArray<Monster>,
+  monstersToSort: ReadonlyArray<Monster>,
   sortConfig: SortConfig | null
 ) => {
-  let sortedMonsters: Monster[] = [...filteredMonsters];
+  let sortedMonsters: Monster[] = [...monstersToSort];
   sortedMonsters.sort((a: Monster, b: Monster) => {
     if (sortConfig === null) {
       return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
