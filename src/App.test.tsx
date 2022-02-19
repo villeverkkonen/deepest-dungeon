@@ -219,8 +219,9 @@ test('should show monsters with name, type, cr and button on table by search inp
 });
 
 test('should order monsters table by name', () => {
-  sortAndVerifyTableByHeader('name', 'asc');
+  // Default is asc by name
   sortAndVerifyTableByHeader('name', 'desc');
+  sortAndVerifyTableByHeader('name', 'asc');
 });
 
 test('should order monsters table by type', () => {
@@ -231,6 +232,23 @@ test('should order monsters table by type', () => {
 test('should order monsters table by challenge rating', () => {
   sortAndVerifyTableByHeader('cr', 'asc');
   sortAndVerifyTableByHeader('cr', 'desc');
+});
+
+test('should show order by direction in monsters table', () => {
+  clickShowAllMonstersBtn();
+  expect(screen.getByTestId('name-asc')).toBeInTheDocument();
+  fireEvent.click(monstersTableHeaderName());
+  expect(screen.getByTestId('name-desc')).toBeInTheDocument();
+
+  fireEvent.click(monstersTableHeaderType());
+  expect(screen.getByTestId('type-asc')).toBeInTheDocument();
+  fireEvent.click(monstersTableHeaderType());
+  expect(screen.getByTestId('type-desc')).toBeInTheDocument();
+
+  fireEvent.click(monstersTableHeaderCr());
+  expect(screen.getByTestId('challenge_rating-asc')).toBeInTheDocument();
+  fireEvent.click(monstersTableHeaderCr());
+  expect(screen.getByTestId('challenge_rating-desc')).toBeInTheDocument();
 });
 
 test('toggle show all monsters when clicked', () => {

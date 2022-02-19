@@ -47,6 +47,15 @@ td {
   cursor: pointer;
 }
 
+.sort-by-img {
+  height: 30px;
+}
+
+.header {
+  display: inline-flex;
+  text-align: center;
+}
+
 @media only screen and (max-width: 800px) {
   #monsters-table,
   #enemies-table {

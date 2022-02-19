@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.ae4048a6.css",
-    "main.js": "/static/js/main.96943df0.js",
+    "main.css": "/static/css/main.c6ffec1a.css",
+    "main.js": "/static/js/main.e2395d2a.js",
     "static/js/787.0fb15c0a.chunk.js": "/static/js/787.0fb15c0a.chunk.js",
     "static/media/enchanted_land.otf": "/static/media/enchanted_land.186931530b4eaddf94c0.otf",
     "static/media/DUNGRG__.TTF": "/static/media/DUNGRG__.374d4b3110d22f2d685e.TTF",
     "index.html": "/index.html",
-    "main.ae4048a6.css.map": "/static/css/main.ae4048a6.css.map",
-    "main.96943df0.js.map": "/static/js/main.96943df0.js.map",
+    "main.c6ffec1a.css.map": "/static/css/main.c6ffec1a.css.map",
+    "main.e2395d2a.js.map": "/static/js/main.e2395d2a.js.map",
     "787.0fb15c0a.chunk.js.map": "/static/js/787.0fb15c0a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ae4048a6.css",
-    "static/js/main.96943df0.js"
+    "static/css/main.c6ffec1a.css",
+    "static/js/main.e2395d2a.js"
   ]
 }

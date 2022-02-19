@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Table } from 'react-bootstrap';
 import { challengeRatingConverted, Monster } from '../utils/Monster';
 
@@ -10,6 +10,17 @@ interface MonstersTableProps {
   addMonster: (monster: Monster) => void;
 }
 
+enum Key {
+  NAME = 'name',
+  TYPE = 'type',
+  CHALLENGE_RATING = 'challenge_rating',
+}
+
+enum Direction {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
 interface SortConfig {
   key: string;
   direction: string;
@@ -17,22 +28,22 @@ interface SortConfig {
 
 const sortMonsters = (
   monstersToSort: ReadonlyArray<Monster>,
-  sortConfig: SortConfig | null
+  sortConfig: SortConfig
 ) => {
   let sortedMonsters: Monster[] = [...monstersToSort];
   sortedMonsters.sort((a: Monster, b: Monster) => {
-    if (sortConfig === null) {
-      return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
-    }
+    // if (sortConfig === null) {
+    //   return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
+    // }
     if (
       a[sortConfig.key as keyof Monster] < b[sortConfig.key as keyof Monster]
     ) {
-      return sortConfig.direction === 'asc' ? -1 : 1;
+      return sortConfig.direction === Direction.ASC ? -1 : 1;
     }
     if (
       a[sortConfig.key as keyof Monster] > b[sortConfig.key as keyof Monster]
     ) {
-      return sortConfig.direction === 'asc' ? 1 : -1;
+      return sortConfig.direction === Direction.ASC ? 1 : -1;
     }
     return 0;
   });
@@ -44,16 +55,47 @@ export default function MonstersTable({
   monsterInput,
   addMonster,
 }: MonstersTableProps) {
-  const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
+  const [sortConfig, setSortConfig] = useState<SortConfig>({
+    key: Key.NAME,
+    direction: Direction.ASC,
+  });
 
-  const sortedMonsters = sortMonsters(monsters, sortConfig);
+  const sortedMonsters = useMemo(() => {
+    return sortMonsters(monsters, sortConfig);
+  }, [monsters, sortConfig]);
 
   const requestSort = (key: string) => {
-    let direction = 'asc';
-    if (sortConfig?.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
+    console.log('SORT CONFIG:');
+    console.log(`key: ${sortConfig.key}`);
+    console.log(`direction: ${sortConfig.direction}`);
+    console.log(`param key: ${key}`);
+    let direction = Direction.ASC;
+    if (sortConfig.key === key && sortConfig.direction === Direction.ASC) {
+      direction = Direction.DESC;
     }
+    console.log(`direction: ${direction}`);
     setSortConfig({ key, direction });
+  };
+
+  const getSortByDirectionImg = (key: string) => {
+    if (sortConfig.key === key) {
+      if (sortConfig.direction === Direction.ASC) {
+        return (
+          <img
+            className="sort-by-img"
+            data-testid={`${key}-asc`}
+            src="/images/sort-by-asc.png"
+          />
+        );
+      }
+      return (
+        <img
+          className="sort-by-img"
+          data-testid={`${key}-desc`}
+          src="/images/sort-by-desc.png"
+        />
+      );
+    }
   };
 
   return (
@@ -72,23 +114,32 @@ export default function MonstersTable({
                 <th
                   data-testid="monsters-table-header-name"
                   className="hoverable"
-                  onClick={() => requestSort('name')}
+                  onClick={() => requestSort(Key.NAME)}
                 >
-                  Name
+                  <div className="header">
+                    Name
+                    {getSortByDirectionImg(Key.NAME)}
+                  </div>
                 </th>
                 <th
                   data-testid="monsters-table-header-type"
                   className="hoverable"
-                  onClick={() => requestSort('type')}
+                  onClick={() => requestSort(Key.TYPE)}
                 >
-                  Type
+                  <div className="header">
+                    Type
+                    {getSortByDirectionImg(Key.TYPE)}
+                  </div>
                 </th>
                 <th
                   data-testid="monsters-table-header-cr"
                   className="hoverable"
-                  onClick={() => requestSort('challenge_rating')}
+                  onClick={() => requestSort(Key.CHALLENGE_RATING)}
                 >
-                  CR
+                  <div className="header">
+                    CR
+                    {getSortByDirectionImg(Key.CHALLENGE_RATING)}
+                  </div>
                 </th>
                 <th />
               </tr>
