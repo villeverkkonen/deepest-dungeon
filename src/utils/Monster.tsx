@@ -5,6 +5,13 @@ export interface Monster {
   readonly quantity: number;
 }
 
+export enum Header {
+  NAME = 'Name',
+  TYPE = 'Type',
+  CR = 'CR',
+  QTY = 'Qty',
+}
+
 export enum Difficulty {
   TRIVIAL = 'Trivial',
   EASY = 'Easy',
@@ -20,6 +27,53 @@ export enum DifficultyColors {
   HARD = 'hard-text',
   DEADLY = 'deadly-text',
 }
+
+export enum Key {
+  NAME = 'name',
+  TYPE = 'type',
+  CHALLENGE_RATING = 'challenge_rating',
+}
+
+export enum Direction {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
+export interface SortConfig {
+  key: string;
+  direction: string;
+}
+
+export const sortMonsters = (
+  monstersToSort: ReadonlyArray<Monster>,
+  sortConfig: SortConfig
+): ReadonlyArray<Monster> => {
+  let sortedMonsters: Monster[] = [...monstersToSort];
+  sortedMonsters.sort((a: Monster, b: Monster) => {
+    if (
+      a[sortConfig.key as keyof Monster] < b[sortConfig.key as keyof Monster]
+    ) {
+      return sortConfig.direction === Direction.ASC ? -1 : 1;
+    }
+
+    if (
+      a[sortConfig.key as keyof Monster] > b[sortConfig.key as keyof Monster]
+    ) {
+      return sortConfig.direction === Direction.ASC ? 1 : -1;
+    }
+
+    if (a[Key.NAME] < b[Key.NAME]) {
+      return -1;
+    }
+
+    if (a[Key.NAME] > b[Key.NAME]) {
+      return 1;
+    }
+
+    return 0;
+  });
+  return sortedMonsters;
+};
 
 export function challengeRatingConverted(cr: string) {
   if (cr === '0.125') {

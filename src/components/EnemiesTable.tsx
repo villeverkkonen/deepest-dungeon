@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
-import { challengeRatingConverted, Monster } from '../utils/Monster';
+import { challengeRatingConverted, Header, Monster } from '../utils/Monster';
 
 import '../styles/Monsters.css';
 
@@ -25,10 +25,10 @@ export default function EnemiesTable({
       <Table id="enemies-table" data-testid="enemies-table">
         <thead>
           <tr>
-            <th data-testid="enemies-table-header-name">Name</th>
-            <th data-testid="enemies-table-header-type">Type</th>
-            <th data-testid="enemies-table-header-cr">CR</th>
-            <th data-testid="enemies-table-header-qty">Qty</th>
+            <th data-testid="enemies-table-header-name">{Header.NAME}</th>
+            <th data-testid="enemies-table-header-type">{Header.TYPE}</th>
+            <th data-testid="enemies-table-header-cr">{Header.CR}</th>
+            <th data-testid="enemies-table-header-qty">{Header.QTY}</th>
             <th />
           </tr>
         </thead>

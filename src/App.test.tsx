@@ -4,7 +4,15 @@ import App from './App';
 import * as api from './utils/fetchMonsters';
 import { testMonsters } from './utils/testMonsters';
 import { playerCountOptions, playerLevelOptions } from './utils/InputValues';
-import { challengeRatingConverted, Difficulty, Monster } from './utils/Monster';
+import {
+  challengeRatingConverted,
+  Difficulty,
+  Direction,
+  Key,
+  Monster,
+  sortMonsters,
+  Header,
+} from './utils/Monster';
 
 function playerCountInput() {
   return screen.getByTestId('player-count-input');
@@ -51,15 +59,21 @@ function monstersTableHeaderCr() {
 }
 
 function sortedTestMonsters() {
-  return testMonsters
-    .map((monster) => monster)
-    .sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
+  return sortMonsters(
+    testMonsters
+      .map((monster) => monster)
+      .sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0)),
+    { key: Key.NAME, direction: Direction.ASC }
+  );
 }
 
 function sortedTestMonstersWithInput(inputValue: string) {
-  return testMonsters
-    .filter((monster) => monster.name.toLocaleLowerCase().includes(inputValue))
-    .sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
+  return sortMonsters(
+    testMonsters.filter((monster) =>
+      monster.name.toLocaleLowerCase().includes(inputValue)
+    ),
+    { key: Key.NAME, direction: Direction.ASC }
+  );
 }
 
 function clickAddMonster(index: number) {
@@ -81,36 +95,54 @@ function sortAndVerifyTableByHeader(sortBy: string, sortOrder: string) {
   searchMonsters(inputValue);
   expect(monstersTableHeaderName()).toBeInTheDocument();
 
-  if (sortBy === 'name') {
+  if (sortBy === Key.NAME) {
     fireEvent.click(monstersTableHeaderName());
-    foundMonsters.sort((a, b) => {
-      if (sortOrder === 'asc') {
-        return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
-      }
-      return a.name > b.name ? -1 : b.name > a.name ? 1 : 0;
-    });
-  } else if (sortBy === 'cr') {
+    if (sortOrder === Direction.ASC) {
+      foundMonsters = sortMonsters(foundMonsters, {
+        key: Key.NAME,
+        direction: Direction.ASC,
+      });
+    } else {
+      foundMonsters = sortMonsters(foundMonsters, {
+        key: Key.NAME,
+        direction: Direction.DESC,
+      });
+    }
+  } else if (sortBy === Key.TYPE) {
+    fireEvent.click(monstersTableHeaderType());
+    if (sortOrder === Direction.ASC) {
+      foundMonsters = sortMonsters(foundMonsters, {
+        key: Key.TYPE,
+        direction: Direction.ASC,
+      });
+    } else {
+      foundMonsters = sortMonsters(foundMonsters, {
+        key: Key.TYPE,
+        direction: Direction.DESC,
+      });
+    }
+  } else if (sortBy === Key.CHALLENGE_RATING) {
     fireEvent.click(monstersTableHeaderCr());
-    foundMonsters.sort((a, b) => {
-      if (sortOrder === 'asc') {
-        return a.challenge_rating > b.challenge_rating
-          ? 1
-          : b.challenge_rating > a.challenge_rating
-          ? -1
-          : 0;
-      }
-      return a.challenge_rating > b.challenge_rating
-        ? -1
-        : b.challenge_rating > a.challenge_rating
-        ? 1
-        : 0;
-    });
+    if (sortOrder === Direction.ASC) {
+      foundMonsters = sortMonsters(foundMonsters, {
+        key: 'challenge_rating',
+        direction: Direction.ASC,
+      });
+    } else {
+      foundMonsters = sortMonsters(foundMonsters, {
+        key: 'challenge_rating',
+        direction: Direction.DESC,
+      });
+    }
   }
 
   foundMonsters.forEach((monster, index) => {
     const monsterId = index + 1;
     expect(screen.getByTestId(`monster-name-${monsterId}`)).toHaveTextContent(
       monster.name
+    );
+    expect(screen.getByTestId(`monster-type-${monsterId}`)).toHaveTextContent(
+      monster.type
     );
     expect(screen.getByTestId(`monster-cr-${monsterId}`)).toHaveTextContent(
       challengeRatingConverted(monster.challenge_rating)
@@ -194,7 +226,7 @@ test('player level input value changes', () => {
 test('has a text input for monsters', () => {
   const input = monsterInput();
   expect(input).toBeInTheDocument();
-  expect(input).toHaveAttribute('type', 'text');
+  expect(input).toHaveAttribute(Key.TYPE, 'text');
   expect(input).toHaveAttribute('placeholder', 'Search...');
 });
 
@@ -222,9 +254,9 @@ test('should show monsters with name, type, cr and button on table by search inp
   expect(
     screen.getByText(`Found monsters: ${foundMonsters.length}`)
   ).toBeInTheDocument();
-  expect(monstersTableHeaderName()).toHaveTextContent('Name');
-  expect(monstersTableHeaderType()).toHaveTextContent('Type');
-  expect(monstersTableHeaderCr()).toHaveTextContent('CR');
+  expect(monstersTableHeaderName()).toHaveTextContent(Header.NAME);
+  expect(monstersTableHeaderType()).toHaveTextContent(Header.TYPE);
+  expect(monstersTableHeaderCr()).toHaveTextContent(Header.CR);
 
   foundMonsters.forEach((monster, index) => {
     const monsterId = index + 1;
@@ -245,18 +277,18 @@ test('should show monsters with name, type, cr and button on table by search inp
 
 test('should order monsters table by name', () => {
   // Default is asc by name
-  sortAndVerifyTableByHeader('name', 'desc');
-  sortAndVerifyTableByHeader('name', 'asc');
+  sortAndVerifyTableByHeader(Key.NAME, Direction.DESC);
+  sortAndVerifyTableByHeader(Key.NAME, Direction.ASC);
 });
 
 test('should order monsters table by type', () => {
-  sortAndVerifyTableByHeader('type', 'asc');
-  sortAndVerifyTableByHeader('type', 'desc');
+  sortAndVerifyTableByHeader(Key.TYPE, Direction.ASC);
+  sortAndVerifyTableByHeader(Key.TYPE, Direction.DESC);
 });
 
 test('should order monsters table by challenge rating', () => {
-  sortAndVerifyTableByHeader('cr', 'asc');
-  sortAndVerifyTableByHeader('cr', 'desc');
+  sortAndVerifyTableByHeader(Key.CHALLENGE_RATING, Direction.ASC);
+  sortAndVerifyTableByHeader(Key.CHALLENGE_RATING, Direction.DESC);
 });
 
 test('should show order by direction in monsters table', () => {

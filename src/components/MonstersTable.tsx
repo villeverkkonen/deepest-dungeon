@@ -1,6 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { Table } from 'react-bootstrap';
-import { challengeRatingConverted, Monster } from '../utils/Monster';
+import {
+  challengeRatingConverted,
+  Direction,
+  Header,
+  Key,
+  Monster,
+  SortConfig,
+  sortMonsters,
+} from '../utils/Monster';
 
 import '../styles/Monsters.css';
 
@@ -9,43 +17,6 @@ interface MonstersTableProps {
   monsterInput: string;
   addMonster: (monster: Monster) => void;
 }
-
-enum Key {
-  NAME = 'name',
-  TYPE = 'type',
-  CHALLENGE_RATING = 'challenge_rating',
-}
-
-enum Direction {
-  ASC = 'asc',
-  DESC = 'desc',
-}
-
-interface SortConfig {
-  key: string;
-  direction: string;
-}
-
-const sortMonsters = (
-  monstersToSort: ReadonlyArray<Monster>,
-  sortConfig: SortConfig
-) => {
-  let sortedMonsters: Monster[] = [...monstersToSort];
-  sortedMonsters.sort((a: Monster, b: Monster) => {
-    if (
-      a[sortConfig.key as keyof Monster] < b[sortConfig.key as keyof Monster]
-    ) {
-      return sortConfig.direction === Direction.ASC ? -1 : 1;
-    }
-    if (
-      a[sortConfig.key as keyof Monster] > b[sortConfig.key as keyof Monster]
-    ) {
-      return sortConfig.direction === Direction.ASC ? 1 : -1;
-    }
-    return 0;
-  });
-  return sortedMonsters;
-};
 
 export default function MonstersTable({
   monsters,
@@ -109,7 +80,7 @@ export default function MonstersTable({
                   onClick={() => requestSort(Key.NAME)}
                 >
                   <div className="header">
-                    Name
+                    {Header.NAME}
                     {getSortByDirectionImg(Key.NAME)}
                   </div>
                 </th>
@@ -119,7 +90,7 @@ export default function MonstersTable({
                   onClick={() => requestSort(Key.TYPE)}
                 >
                   <div className="header">
-                    Type
+                    {Header.TYPE}
                     {getSortByDirectionImg(Key.TYPE)}
                   </div>
                 </th>
@@ -129,7 +100,7 @@ export default function MonstersTable({
                   onClick={() => requestSort(Key.CHALLENGE_RATING)}
                 >
                   <div className="header">
-                    CR
+                    {Header.CR}
                     {getSortByDirectionImg(Key.CHALLENGE_RATING)}
                   </div>
                 </th>
