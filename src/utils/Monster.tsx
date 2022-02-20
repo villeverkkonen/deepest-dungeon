@@ -50,16 +50,32 @@ export const sortMonsters = (
 ): ReadonlyArray<Monster> => {
   let sortedMonsters: Monster[] = [...monstersToSort];
   sortedMonsters.sort((a: Monster, b: Monster) => {
-    if (
-      a[sortConfig.key as keyof Monster] < b[sortConfig.key as keyof Monster]
-    ) {
-      return sortConfig.direction === Direction.ASC ? -1 : 1;
-    }
+    if (sortConfig.key === Key.CHALLENGE_RATING) {
+      if (
+        +a[sortConfig.key as keyof Monster] <
+        +b[sortConfig.key as keyof Monster]
+      ) {
+        return sortConfig.direction === Direction.ASC ? -1 : 1;
+      }
 
-    if (
-      a[sortConfig.key as keyof Monster] > b[sortConfig.key as keyof Monster]
-    ) {
-      return sortConfig.direction === Direction.ASC ? 1 : -1;
+      if (
+        +a[sortConfig.key as keyof Monster] >
+        +b[sortConfig.key as keyof Monster]
+      ) {
+        return sortConfig.direction === Direction.ASC ? 1 : -1;
+      }
+    } else {
+      if (
+        a[sortConfig.key as keyof Monster] < b[sortConfig.key as keyof Monster]
+      ) {
+        return sortConfig.direction === Direction.ASC ? -1 : 1;
+      }
+
+      if (
+        a[sortConfig.key as keyof Monster] > b[sortConfig.key as keyof Monster]
+      ) {
+        return sortConfig.direction === Direction.ASC ? 1 : -1;
+      }
     }
 
     if (a[Key.NAME] < b[Key.NAME]) {
