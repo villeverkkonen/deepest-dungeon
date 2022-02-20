@@ -104,10 +104,7 @@ export const monsterMultiplier = (enemiesCount: number) => {
   if (enemiesCount >= 11 && enemiesCount <= 14) {
     return 3;
   }
-  if (enemiesCount >= 15) {
-    return 4;
-  }
-  return 0;
+  return 4;
 };
 
 export const xpByCr: { [key: string]: number } = {

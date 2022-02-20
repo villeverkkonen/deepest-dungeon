@@ -585,7 +585,7 @@ test('should show deadly difficulty with two monsters', () => {
   checkDifficulty(Difficulty.DEADLY);
 });
 
-test('should show deadly with super high difficulty', () => {
-  addMonsters('beholder', 10, 1);
+test('should show deadly with super high difficulty and 4x multiplier', () => {
+  addMonsters('goblin', 15, 1);
   checkDifficulty(Difficulty.DEADLY);
 });
