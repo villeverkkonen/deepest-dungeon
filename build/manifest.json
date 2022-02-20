@@ -3,7 +3,7 @@
   "name": "Deepest Dungeon",
   "icons": [
     {
-      "src": "favicon.png",
+      "src": "/images/favicon.png",
       "sizes": "16x16",
       "type": "image/png"
     }
