@@ -14,8 +14,35 @@
 }
 
 #difficulty-text {
-  font-weight: bold;
   font-size: 2.2rem;
+}
+
+.trivial-text,
+.easy-text,
+.medium-text,
+.hard-text,
+.deadly-text {
+  font-weight: bold;
+}
+
+.trivial-text {
+  color: #fff30f;
+}
+
+.easy-text {
+  color: #4f873d;
+}
+
+.medium-text {
+  color: #185adb;
+}
+
+.hard-text {
+  color: #ff6f00;
+}
+
+.deadly-text {
+  color: #cf291d;
 }
 
 @media only screen and (max-width: 800px) {

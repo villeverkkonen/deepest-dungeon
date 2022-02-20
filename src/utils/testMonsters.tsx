@@ -20,6 +20,12 @@ export const testMonsters: ReadonlyArray<Monster> = [
     quantity: 0,
   },
   {
+    name: 'Homunculus',
+    type: 'Construct',
+    challenge_rating: '0',
+    quantity: 0,
+  },
+  {
     name: 'Monster',
     type: 'Beast',
     challenge_rating: '1',
@@ -35,6 +41,12 @@ export const testMonsters: ReadonlyArray<Monster> = [
     name: 'Test Orc',
     type: 'Humanoid',
     challenge_rating: '0.5',
+    quantity: 0,
+  },
+  {
+    name: 'Cat',
+    type: 'Beast',
+    challenge_rating: '0',
     quantity: 0,
   },
 ];

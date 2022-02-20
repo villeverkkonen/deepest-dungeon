@@ -4,7 +4,7 @@ import App from './App';
 import * as api from './utils/fetchMonsters';
 import { testMonsters } from './utils/testMonsters';
 import { playerCountOptions, playerLevelOptions } from './utils/InputValues';
-import { challengeRatingConverted, Monster } from './utils/Monster';
+import { challengeRatingConverted, Difficulty, Monster } from './utils/Monster';
 
 function playerCountInput() {
   return screen.getByTestId('player-count-input');
@@ -130,11 +130,11 @@ function setLevel(level: number) {
   });
 }
 
-function addMonsters(monster: string, amount: number) {
+function addMonsters(monster: string, amount: number, index: number) {
   searchMonsters(monster);
   clickAddMonster(1);
   for (let i = 1; i < amount; i++) {
-    clickAddEnemy(1);
+    clickAddEnemy(index);
   }
 }
 
@@ -478,67 +478,82 @@ test('should show difficulty title when enemies added', () => {
   expect(screen.getByTestId('difficulty-text')).toHaveTextContent('Difficulty');
 });
 
+test('should show trivial difficulty with one monster', () => {
+  setPlayers(1);
+  setLevel(1);
+  addMonsters('cat', 1, 1);
+  checkDifficulty(Difficulty.TRIVIAL);
+});
+
+test('should show trivial difficulty with two monsters', () => {
+  setPlayers(1);
+  setLevel(2);
+  addMonsters('cat', 1, 1);
+  addMonsters('homunculus', 1, 2);
+  checkDifficulty(Difficulty.TRIVIAL);
+});
+
 test('should show easy difficulty with one monster', () => {
   setPlayers(4);
   setLevel(2);
-  addMonsters('goblin', 3);
-  checkDifficulty('Easy');
+  addMonsters('goblin', 3, 1);
+  checkDifficulty(Difficulty.EASY);
 });
 
 test('should show easy difficulty with two monsters', () => {
   setPlayers(3);
   setLevel(3);
-  addMonsters('goblin', 1);
-  addMonsters('orc', 1);
-  checkDifficulty('Easy');
+  addMonsters('goblin', 1, 1);
+  addMonsters('orc', 1, 2);
+  checkDifficulty(Difficulty.EASY);
 });
 
 test('should show medium difficulty with one monster', () => {
   setPlayers(4);
   setLevel(2);
-  addMonsters('goblin', 4);
-  checkDifficulty('Medium');
+  addMonsters('goblin', 4, 1);
+  checkDifficulty(Difficulty.MEDIUM);
 });
 
 test('should show medium difficulty with two monsters', () => {
   setPlayers(3);
   setLevel(3);
-  addMonsters('goblin', 1);
-  addMonsters('orc', 2);
-  checkDifficulty('Medium');
+  addMonsters('goblin', 1, 1);
+  addMonsters('orc', 2, 2);
+  checkDifficulty(Difficulty.MEDIUM);
 });
 
 test('should show hard difficulty with one monster', () => {
   setPlayers(4);
   setLevel(2);
-  addMonsters('goblin', 6);
-  checkDifficulty('Hard');
+  addMonsters('goblin', 6, 1);
+  checkDifficulty(Difficulty.HARD);
 });
 
 test('should show hard difficulty with two monsters', () => {
   setPlayers(3);
   setLevel(3);
-  addMonsters('goblin', 3);
-  addMonsters('orc', 2);
-  checkDifficulty('Hard');
+  addMonsters('goblin', 3, 1);
+  addMonsters('orc', 2, 2);
+  checkDifficulty(Difficulty.HARD);
 });
 
 test('should show deadly difficulty with one monster', () => {
   setPlayers(4);
   setLevel(2);
-  addMonsters('goblin', 7);
-  checkDifficulty('Deadly');
+  addMonsters('goblin', 7, 1);
+  checkDifficulty(Difficulty.DEADLY);
 });
 
 test('should show deadly difficulty with two monsters', () => {
   setPlayers(3);
   setLevel(3);
-  addMonsters('goblin', 3);
-  addMonsters('orc', 4);
-  checkDifficulty('Deadly');
+  addMonsters('goblin', 3, 1);
+  addMonsters('orc', 4, 2);
+  checkDifficulty(Difficulty.DEADLY);
 });
 
 test('should show deadly with super high difficulty', () => {
-  addMonsters('beholder', 100);
-  checkDifficulty('Deadly');
+  addMonsters('beholder', 10, 1);
+  checkDifficulty(Difficulty.DEADLY);
 });

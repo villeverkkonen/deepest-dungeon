@@ -18,6 +18,8 @@ def get_monsters():
 
         for monster in response.json()['results']:
             challengeRating = monster['challenge_rating']
+            if monster['challenge_rating'] == '1/8':
+                challengeRating = '0.125'
             if monster['challenge_rating'] == '1/4':
                 challengeRating = '0.25'
             if monster['challenge_rating'] == '1/2':
