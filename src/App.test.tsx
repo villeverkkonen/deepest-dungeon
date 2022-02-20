@@ -589,3 +589,65 @@ test('should show deadly with super high difficulty and 4x multiplier', () => {
   addMonsters('goblin', 15, 1);
   checkDifficulty(Difficulty.DEADLY);
 });
+
+test('show 1x multiplier experience with 1 player and 1 enemy', () => {
+  addMonsters('goblin', 1, 1);
+  expect(screen.getByTestId('experience-text')).toHaveTextContent(
+    'Total XP: 50 - Individual XP: 50'
+  );
+});
+
+test('show 1.5 multiplier experience with 2 players and 2 enemies', () => {
+  setPlayers(2);
+  addMonsters('goblin', 1, 1);
+  addMonsters('orc', 1, 2);
+  expect(screen.getByTestId('experience-text')).toHaveTextContent(
+    'Total XP: 225 - Individual XP: 112.5'
+  );
+});
+
+test('show 2x multiplier experience with 3 players and 5 enemies', () => {
+  setPlayers(3);
+  addMonsters('goblin', 2, 1);
+  addMonsters('orc', 2, 2);
+  addMonsters('twig blight', 1, 3);
+  expect(screen.getByTestId('experience-text')).toHaveTextContent(
+    'Total XP: 650 - Individual XP: 216.5'
+  );
+});
+
+test('show 2.5x multiplier experience with 4 players and 8 enemies', () => {
+  setPlayers(4);
+  addMonsters('goblin', 2, 1);
+  addMonsters('orc', 2, 2);
+  addMonsters('twig blight', 2, 3);
+  addMonsters('cat', 2, 4);
+  expect(screen.getByTestId('experience-text')).toHaveTextContent(
+    'Total XP: 925 - Individual XP: 231.5'
+  );
+});
+
+test('show 3x multiplier experience with 5 players and 13 enemies', () => {
+  setPlayers(5);
+  addMonsters('goblin', 3, 1);
+  addMonsters('orc', 3, 2);
+  addMonsters('twig blight', 3, 3);
+  addMonsters('cat', 3, 4);
+  addMonsters('dragon', 1, 5);
+  expect(screen.getByTestId('experience-text')).toHaveTextContent(
+    'Total XP: 3015 - Individual XP: 603'
+  );
+});
+
+test('show 4x multiplier experience with 8 players and 15 enemies', () => {
+  setPlayers(8);
+  addMonsters('goblin', 4, 1);
+  addMonsters('orc', 4, 2);
+  addMonsters('twig blight', 4, 3);
+  addMonsters('cat', 1, 4);
+  addMonsters('dragon', 1, 5);
+  addMonsters('beholder', 1, 6);
+  expect(screen.getByTestId('experience-text')).toHaveTextContent(
+    'Total XP: 20240 - Individual XP: 2530'
+  );
+});

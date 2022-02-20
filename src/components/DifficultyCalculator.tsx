@@ -83,10 +83,28 @@ export default function Calculator({
     }
   }
 
+  function getIndividualXp() {
+    const individualXp = (
+      Math.round((totalXpOfMonsters / players) * 2) / 2
+    ).toFixed(1);
+    // Dont show .0
+    var decimalPart = +individualXp % 1;
+    if (decimalPart < 0.5) {
+      return +individualXp - decimalPart;
+    } else {
+      return +individualXp - decimalPart + 0.5;
+    }
+  }
+
   return (
-    <div id="difficulty-text" data-testid="difficulty-text">
-      Difficulty:{' '}
-      <span className={getColorClass(difficulty)}>{difficulty}</span>
-    </div>
+    <>
+      <div id="difficulty-text" data-testid="difficulty-text">
+        Difficulty:{' '}
+        <span className={getColorClass(difficulty)}>{difficulty}</span>
+      </div>
+      <div id="experience-text" data-testid="experience-text">
+        Total XP: {totalXpOfMonsters} - Individual XP: {getIndividualXp()}
+      </div>
+    </>
   );
 }
