@@ -18,4 +18,4 @@ https://www.dnd5eapi.co/
 
 <br>
 
-![Deepest Dungeon](/images/deepest_dungeon.png)
+![Deepest Dungeon](/public/images/deepest_dungeon.png)
