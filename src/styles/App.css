@@ -13,6 +13,11 @@
   margin-bottom: 10px;
 }
 
+#difficulty-text {
+  font-weight: bold;
+  font-size: 2.2rem;
+}
+
 @media only screen and (max-width: 800px) {
   .page-title {
     font-size: 2.5em;
@@ -20,5 +25,9 @@
 
   .app {
     font-size: 1.5em;
+  }
+
+  #difficulty-text {
+    font-size: 2rem;
   }
 }

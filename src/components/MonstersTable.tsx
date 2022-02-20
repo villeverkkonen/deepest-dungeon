@@ -62,15 +62,10 @@ export default function MonstersTable({
   }, [monsters, sortConfig]);
 
   const requestSort = (key: string) => {
-    console.log('SORT CONFIG:');
-    console.log(`key: ${sortConfig.key}`);
-    console.log(`direction: ${sortConfig.direction}`);
-    console.log(`param key: ${key}`);
     let direction = Direction.ASC;
     if (sortConfig.key === key && sortConfig.direction === Direction.ASC) {
       direction = Direction.DESC;
     }
-    console.log(`direction: ${direction}`);
     setSortConfig({ key, direction });
   };
 

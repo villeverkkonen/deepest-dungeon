@@ -7,9 +7,9 @@ import PlayerLevelInput from './components/PlayerLevelInput';
 import MonsterInput from './components/MonsterInput';
 import MonstersTable from './components/MonstersTable';
 import EnemiesTable from './components/EnemiesTable';
+import DifficultyCalculator from './components/DifficultyCalculator';
 
 import './styles/App.css';
-import { testMonsters } from './utils/testMonsters';
 
 function App() {
   const [playerCount, setPlayerCount] = useState<string>('');
@@ -156,6 +156,7 @@ function App() {
                 showAllMonsters={showAllMonsters}
               />
             </div>
+            {enemies.length > 0 ? <DifficultyCalculator /> : null}
             <EnemiesTable
               enemies={enemies}
               addEnemy={addEnemy}
