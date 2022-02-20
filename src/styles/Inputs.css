@@ -29,6 +29,14 @@
   width: 40px;
 }
 
+.dropdown-input:hover {
+  cursor: pointer;
+}
+
 #all-monsters-btn {
   vertical-align: text-top;
+}
+
+#all-monsters-btn:hover {
+  cursor: pointer;
 }

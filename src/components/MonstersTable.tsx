@@ -32,9 +32,6 @@ const sortMonsters = (
 ) => {
   let sortedMonsters: Monster[] = [...monstersToSort];
   sortedMonsters.sort((a: Monster, b: Monster) => {
-    // if (sortConfig === null) {
-    //   return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
-    // }
     if (
       a[sortConfig.key as keyof Monster] < b[sortConfig.key as keyof Monster]
     ) {
